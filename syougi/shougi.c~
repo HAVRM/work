@@ -1,0 +1,8 @@
+#include <stdio.h>
+#include "show.h"
+
+int main(void){
+  int_map();
+  print_map();
+  return 0;
+}
