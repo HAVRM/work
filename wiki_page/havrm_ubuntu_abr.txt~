@@ -1,5 +1,5 @@
 *構築するシステム
-テキストエディターでC/C++のソースコードを書き、[[make]]を使ってコンパイル、[[HIDaspx::http://www-ice.yamagata-cit.ac.jp/ken/senshu/sitedev/index.php?AVR%2FHIDaspx]]を用いてマイコンに転送する。この方法なのはWindowsで[[AtmelStudio::]]とHIDaspxを用いてAVRの開発を行っていたため。この方法はAtmega88PA-PUとAtmega328P-PUでは確認した。他のAVRマイコンでも可能なはずである。また転送装置として[[AVRISP mkⅡ::]]も使えるようにしているが、持っていないため未確認である。
+テキストエディターでC/C++のソースコードを書き、[[make]]を使ってコンパイル、[[HIDaspx::http://www-ice.yamagata-cit.ac.jp/ken/senshu/sitedev/index.php?AVR%2FHIDaspx]]を用いてマイコンに転送する。この方法なのはWindowsで[[AtmelStudio::http://www.atmel.com/ja/jp/tools/ATMELSTUDIO.aspx]]とHIDaspxを用いてAVRの開発を行っていたため。この方法はAtmega88PA-PUとAtmega328P-PUでは確認した。他のAVRマイコンでも可能なはずである。また転送装置として[[AVRISP mkⅡ::http://akizukidenshi.com/catalog/g/gM-02582/]]も使えるようにしているが、持っていないため未確認である。
 
 *参考サイト
 [[RAINさんのブログ]]
