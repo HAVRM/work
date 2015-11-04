@@ -1,0 +1,11 @@
+*参考サイト [#e9bc41b5]
+[[ask ubuntu::http://askubuntu.com/questions/362951/installed-teamviewer-using-a-64-bits-system-but-i-get-a-dependency-error]]
+
+*使用コマンド [#i40fd00d]
+説明は省きます。使用環境は[[Ubuntu]]を確認してください。
+
+$ wget http://www.teamviewer.com/download/teamviewer_linux.deb
+$ sudo dpkg --add-architecture i386
+$ sudo apt-get update
+$ sudo apt-get install gdebi
+$ sudo gdebi teamviewer_linux.deb

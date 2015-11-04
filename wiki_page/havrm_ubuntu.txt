@@ -1,0 +1,22 @@
+*使用環境について&br; [#t549139e]
+僕自身は14.04 LTS(64bit)を使用しています。2つのコンピュータでやっていてそれぞれのスペックは次のとおりです
+1 メイン
+・CPU:Intel i7
+・GPU:GEFORCE GTX765M
+・メモリー:16GB(+swap 4GB)
+・起動ディスク:mSATA SSD 64GB
+
+2 サブ
+・CPU:Intel Celeron
+・メモリー:1GB(+swap 16GB)
+・起動ディスク:内蔵HDD 80GB
+
+*項目&br; [#qb9a47bb]
+基本的に他のサイトのまとめです。成功するやり方であって、新しいことが書いているわけではないです。
+
+[[Ubuntuのインストール(USBにLTSを)]]
+[[AVR用の環境構築]]
+[[Xpresso IDEのインストール]]
+[[Arduino IDEのインストール]]
+[[LINEのインストール]]
+[[TeamViewerのインストール]]
