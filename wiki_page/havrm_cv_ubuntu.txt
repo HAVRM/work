@@ -1,0 +1,34 @@
+*参考サイト
+[[ホリバ研究室::http://www.icrus.org/horiba/article/2014_11_07_01.php]]
+
+*使用コマンド
+説明は省く。Macが元だとこれでできないらしい。使用環境は[[Ubuntu]]を確認してください。
+
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install build-essential libgtk2.0-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev cmake python-dev python-numpy python-tk libtbb-dev libeigen3-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev libqt4-dev libqt4-opengl-dev sphinx-common texlive-latex-extra libv4l-dev libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev default-jdk ant libvtk5-qt4-dev
+$ mkdir ~/opencv_dir
+$ cd ~/opencv_dir
+$ wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.9/opencv-2.4.9.zip
+$ unzip opencv-2.4.9.zip
+$ cd opencv-2.4.9
+$ mkdir build
+$ cd build
+$ cmake -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D WITH_VTK=ON ..
+$ make
+$ sudo make install
+$ sudo gedit /etc/ld.so.conf.d/opencv.conf
+
+以下を追加する
+/usr/local/lib
+
+$ sudo ldconfig
+$ sudo gedit /etc/bash.bashrc
+
+以下を追加する
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
+export PKG_CONFIG_PATH
+
+$ cd ~/opencv_dir/opencv-2.4.9/samples/c
+$ chmod +x build_all.sh
+$ ./build_all.sh
