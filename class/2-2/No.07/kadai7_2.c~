@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+void euler(double x,double y,double a,double b,int n);
+double f(double x,double y);
+
+int main(void){
+  int n;
+  double a=0.0,b=1.0,x=0.0,y=1.0;
+  printf("please input n:");
+  scanf("%d",&n);
+  euler(x,y,a,b,n);
+  return 0;
+}
+
+void euler(double x,double y,double a,double b,int n){
+  double h;
+  int i;
+  h=(b-a)/n;
+  for(i=0;i<n;i++){
+    x+=h;
+    y+=h*f(x,y);
+  }
+  printf("Ans:%lf\n",y);
+}
+
+double f(double x,double y){
+  return (x+y);
+}

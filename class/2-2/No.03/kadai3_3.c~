@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N 100
+
+int main(void){
+  int *num;
+  FILE *fp;
+  fp=fopen("data.txt","r");
+  if(fp==NULL){
+    printf("error\n");
+    exit(1);
+  }
+  while(fscanf(fp,"%d",&num)!=EOF)printf("%3d",num);
+  printf("\n");
+  fclose(fp);
+}

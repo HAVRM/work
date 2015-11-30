@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void){
+  FILE *file=fopen("kuku","r");
+  if(file==NULL){
+    fprintf(stderr,"cannot open file 'kuku'\n\r");
+    exit(1);
+  }
+  int i,j,n[81],s,e;
+  for(i=1;i<=9;i++){
+    for(j=1;j<=9;j++){
+      s=i*9+j-10;
+      e=fscanf(file,"%d",&n[s]);
+      if(e!=1){
+	fprintf(stderr,"cannot read file %d %d\n\r",i,j);
+	fclose(file);
+	exit(1);
+      }
+    }
+  }
+  fclose(file);
+  file=fopen("kuku","w");
+  for(i=1;i<=9;i++){
+    for(j=1;j<=9;j++){
+      s=i*9+j-10;
+      fprintf(file,"%2d",n[s]);
+      if(n[s]==i*j)fprintf(file,"- ");
+      else fprintf(file,"X ");
+    }
+    fprintf(file,"\n");
+  }
+  fclose(file);
+  printf("finish.\n\r");
+  return 0;
+}
