@@ -4,12 +4,11 @@ long combination(long n,long r);
 
 int main(void){
   long n,r,ans;
-  printf("prease put the number n of nCr:");
-  scanf("%ld",&n);
-  printf("prease put the number r of nCr:");
-  scanf("%ld",&r);
-  ans=(long)combination(n,r);
-  printf("answer is %ld\n",ans);
+  int i;
+  FILE *fp;
+  fp=fopen("report1_2_kekka.txt","w");
+  for(i=40;i<=50;i++)fprintf(fp,"65 C %d=%ld\n",i,combination(65,i));
+  fclose(fp);
   return 0;
 }
 
