@@ -6,6 +6,80 @@ C、C++言語における[[構造体]]を拡張したもので構造体みたいに変数のほか、関数も格納
 &link_anchor(ibe115b7){コンストラクタ}
 &link_anchor(qff1515b){オペレイター}
 
-*[[定義]] [#h61121c8]
-*[[コンストラクタ]] [#ibe115b7]
-*[[オペレイター]] [#qff1515b]
+*定義 [#h61121c8]
+&link_anchor(cppcldefbs){基本}
+&link_anchor(cppcldefvr){変数}
+&link_anchor(cppcldeffc){関数}
+
+**基本 [#cppcldefbs]
+studentというクラスを作りたいときは次のように作る。書くところはどこでもいいが、一般的にヘッダファイルに書いておいてincludeする。
+#blockquote(){
+#highlight(c){
+class student{
+private:
+
+public:
+
+};
+}
+}
+単純にstudentというクラスを作るときはこれでいい。この中にさまざまな変数や関数を書いていく。ここにあるprivate:とpublic:はその下にある定義の属性を決めるものでprivateの下はクラス内からしかアクセスできないが、publicの下は外から見れる。privateの下に書くものとしてはよく設定値などが格納される。これは外からは一切いじることができなくなるからである。ここではprivateとpublicとはっきりと書いているが、省略してもいい。これらの記述がなかった場合自動的にprivate扱いになる。
+
+**変数 [#cppcldefvr]
+クラスに変数を設定するときはそのままクラスの中にに定義を書けばよい。下にprivateでstring型とpublicでint型を定義する。
+#blockquote(){
+#highlight(c){
+class student{
+private:
+  string *name;
+public:
+  int num;
+};
+}
+}
+このときクラスの使い方は次のようになる。
+#blockquote(){
+#highlight(c){
+int main(){
+  student a;
+  a.num=100;
+  return 0;
+}
+}
+}
+これでクラスstudentの変数aを定義して、その中のnumという要素に100を代入できた。
+
+ここまでは構造体とほとんど変わらない。
+
+**関数 [#cppcldeffc]
+クラスに関数を設定するときもそのままクラスの中に定義を書けばよい。下にpublicでx番目のnameのなかにデータを書き込む関数を定義する。
+#blockquote(){
+#highlight(c){
+class student{
+private:
+  string *name;
+public:
+  int num;
+  void add(int n,string nm){
+    student::name[n]=nm;
+  }
+};
+}
+}
+ここで出てきたstudent::という表記は他のクラスのや普通の変数とこのnameを分離するためにこのクラスで定義されているものと明白にするためのものである。ここでは中に直接書いたが、外に記述することもでき、そのときは下のように書く。
+#blockquote(){
+#highlight(c){
+class student{
+private:
+  string *name;
+public:
+  int num;
+  void add(int n,string nm);
+};
+void student::add(int n,string nm){
+  student::name[n]=nm;
+}
+}
+}
+*コンストラクタ [#ibe115b7]
+*オペレイター [#qff1515b]
