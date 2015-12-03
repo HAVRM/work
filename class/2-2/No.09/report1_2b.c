@@ -16,8 +16,8 @@ int main(void){
 long combination(long n,long r){
   if(r==0 || n==r)return 1;
   int i=0;
-  double c=1;
+  long double c=1;
   if(n-r<r)r=n-r;
-  for(i=0;i<r;i++)c=c*(double)(n-i)/(double)(r-i);
+  for(i=0;i<r;i++)c=c*(long double)(n-i)/(long double)(r-i);
   return (long)c;
 }
