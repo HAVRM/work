@@ -6,6 +6,7 @@ char form[100];
 int state[100];//num:0~9,operator:101~,*01:-,*02:+,*11:/,*12:*,*21:^,*31:!
 const char *ope="-+/*^ !";
 
+
 int char2rank(char c, int o);
 void swapdiv(void);
 int power(int x, int y);
@@ -15,16 +16,17 @@ int set_form(void);//-1:miss much (),-2:unknown operator
 int calc(char *f, int *s,int n);
 
 int main(void){
-  int j;
+  int i,n;
   while(1){
-    printf("please write formula which you want to calculation:\n");
+    printf("please write formula which you want to calculation:\n\n");
     fgets(form,100,stdin);
-    j=set_form();
-    //swapdiv();
-    int i;
-    //for(i=0;i<20;i++)printf("%d,",state[i]);
-    //printf("\n");
-    printf("=%d\n\n",calc(form,state,j));
+    n=set_form();
+    swapdiv();
+    printf("=%d\n\n",calc(form,state,n));
+    for(i=0;i<100;i++){
+      form[i]=0;
+      state[i]=0;
+    }
   }
   return 0;
 }
@@ -35,16 +37,26 @@ int char2rank(char c,int o){
   return -1;
 }
 
-/*void swapdiv(void){
-  int i,j,k,l,tn;
-  char tc
-  for(i=0;form[i]!='\n';i++)if(form[i]=='/'){
-    for(j=i+1;form[j]!='\n';j++)if(state[i]/10==state[j]/10){
-      for(k=j+1;form[k]!='\n';k++)if(state[j]/10==state[k]/10 && state[i]%10<){
-    tn=state[i];
-    for(l=1;l<)
-
-}*/
+void swapdiv(void){
+  int i,j,k,l,m,tn;
+  char tc;
+  for(i=0;form[i]!='\n';i++){
+    if(form[i]=='/')for(j=i+1;form[j]!='\n';j++)if(state[j]>9 && state[i]/10>=state[j]/10)for(k=j;form[k]!='\n';k++)if(state[k]>9 && state[i]>state[k]){
+      for(l=0;l<j-i;l++){
+        tn=state[i];
+        tc=form[i];
+        for(m=i;m<k-1;m++){
+          state[m]=state[m+1];
+          form[m]=form[m+1];
+        }
+        state[k-1]=tn;
+        form[k-1]=tc;
+      }
+      goto ends;
+    }
+ends:;
+  }
+}
 
 int power(int x, int y){
   int i,a=1;
@@ -94,6 +106,10 @@ int set_form(){
     }
     n=i;
   }
+  for(i=0;form[i]!='\n';i++)j=i;
+  form[j+2]=form[j+1];
+  state[j+1]=10;
+  form[j+1]=32;
   return n;
 }
 
