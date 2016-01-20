@@ -43,7 +43,7 @@ List *sortedaddNode(List *head, char *ss){
     f=p;
     p=p->next;
   }
-  if(f==p)return addHead(p,ss);
+  if(f==p && p->next!=NULL)return addHead(p,ss);
   f->next=NULL;
   f=addTail(f,ss);
   f->next->next=p;

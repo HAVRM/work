@@ -105,5 +105,7 @@ int main(void){
   for(i=629;i>0;i--)p1=list_multi_int(p1,i);
   p=list_add(p,p1);
   disp(p);
-  //free(p);
+  free(p);
+  free(p1);
+}
 }
