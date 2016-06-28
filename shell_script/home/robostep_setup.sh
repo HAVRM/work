@@ -2,17 +2,18 @@
 
 #インターネット接続状態で実行
 #ubuntu14.04での動作確認済み
+#2016年ロボコンに関連するすべてのインストールを行う
 #下のNAME,PASS,GITNAME,GITMAIL,GITPASSの中を編集するGIT..はgithubにおけるもの
 #インストールするものは関数化されていて一番最後のupdate_upgrade以下の行が
 #それぞれ何をインストールするかを指定している。インストールしなくていい物は
 #それが書かれている先頭に'#'をつければいい。
 #例: ros_install->#ros_install
 
-NAME="your_name"
-PASS="your_password"
-GITNAME="your_github_name"
-GITMAIL="your_github_mail"
-GITPASS="your_github_password"
+NAME="***" #PC username ___@...:~$
+PASS="***" #PC password
+GITNAME="***" #github username
+GITMAIL="******@gmail.com" #github mail address
+GITPASS="***" #github password
 
 update_upgrade()
 {
@@ -63,7 +64,7 @@ LRF_install()
 echo "---urg_node_install---"
 cd ~
 update_upgrade
-wget https://github.com/HAVRM/work/raw/master/install/urgwidget_driver.tar.gz
+wget https://github.com/***/work/raw/master/install/urgwidget_driver.tar.gz
 tar xzvf urgwidget_driver.tar.gz
 mv urgwidget_driver ~/catkin_ws/src/urgwidget_driver
 roscd urgwidget_driver
@@ -126,13 +127,18 @@ cd ~
 update_upgrade
 cd ~/catkin_ws/src
 git init
-git remote rm #your git name,from this __
-git remote add __ https://${GITNAME}:${GITPASS}@github.com/ #your git page
-git fetch __
-git checkout #your branch,from this ~~
-git merge __/~~
+git remote rm ros
+git remote add ros https://${GITNAME}:${GITPASS}@github.com/ROBOSTEP/ROS.git
+git fetch ros
+git checkout 2016_bezier
+git merge ros/2016_bezier
 git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
+cd ~/catkin_ws/src/Robocon_2016/shell_script
+echo "d" | . make_route.sh
+. catkin_make.sh
+cp set_ros.sh ~/set_ros.sh
+cp rosserial.sh ~/rosserial.sh
 cd ~
 }
 
@@ -145,8 +151,8 @@ echo $PASS | sudo -S add-apt-repository ppa:ikuya-fruitsbasket/tigervnc
 echo $PASS | sudo -S apt-get update
 echo $PASS | sudo -S apt-get -y install tigervncserver
 tigervncpasswd <<\__EOF__
-your_pass
-your_pass
+robostep
+robostep
 n
 __EOF__
 #rm -f .auto_vnc.sh

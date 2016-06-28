@@ -4,16 +4,13 @@
 #ubuntu14.04での動作確認済み
 #2016年ロボコンに関連するすべてのインストールを行う
 #下のNAME,PASS,GITNAME,GITMAIL,GITPASSの中を編集するGIT..はgithubにおけるもの
-#インストールするものは関数化されていて一番最後のupdate_upgrade以下の行が
-#それぞれ何をインストールするかを指定している。インストールしなくていい物は
-#それが書かれている先頭に'#'をつければいい。
-#例: ros_install->#ros_install
+#githubを使わない場合は147行目の"github_setting"の先頭に"#"をつければいい
 
 NAME="your_name"
-PASS="your_password"
+PASS="your_pass"
 GITNAME="your_github_name"
 GITMAIL="your_github_mail"
-GITPASS="your_github_password"
+GITPASS="your_github_pass"
 
 update_upgrade()
 {
@@ -64,7 +61,7 @@ LRF_install()
 echo "---urg_node_install---"
 cd ~
 update_upgrade
-wget https://github.com/HAVRM/work/raw/master/install/urgwidget_driver.tar.gz
+wget https://github.com/***/work/raw/master/install/urgwidget_driver.tar.gz
 tar xzvf urgwidget_driver.tar.gz
 mv urgwidget_driver ~/catkin_ws/src/urgwidget_driver
 roscd urgwidget_driver
@@ -127,7 +124,6 @@ cd ~
 update_upgrade
 cd ~/catkin_ws/src
 git init
-git remote rm ros
 git remote add ros https://${GITNAME}:${GITPASS}@github.com/ROBOSTEP/ROS.git
 git fetch ros
 git checkout 2016_bezier
@@ -155,11 +151,11 @@ robostep
 robostep
 n
 __EOF__
-#rm -f .auto_vnc.sh
-#echo "#!/bin/bash
-#
-#gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/.auto_vnc.sh
-#echo ". .auto_vnc.sh" >> ~/.bashrc
+rm -f auto_vnc.sh
+echo "#!/bin/bash
+
+gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/auto_vnc.sh
+echo ". auto_vnc.sh" >> ~/.bashrc
 cd ~
 }
 
