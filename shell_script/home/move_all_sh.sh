@@ -54,6 +54,15 @@ do
 	elif [ `echo ${arg} | grep -i "Trash"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "set_ros"` ]
+	then
+		:
+	elif [ `echo ${arg} | grep -i "gigabyte"` ]
+	then
+		:
+	elif [ `echo ${arg} | grep -i "robocon"` ]
+	then
+		:
 	else
 		arg2=${arg#*/}
 		if [ ${arg2} = ${arg2%/*} ]
