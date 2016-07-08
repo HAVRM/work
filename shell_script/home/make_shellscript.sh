@@ -24,7 +24,7 @@ fi
 rm -rf ${NAME}
 echo "#!/bin/bash
 
-PLACE=\`pwd\`
+PLACE${NAME%.*}=\`pwd\`
 if [ \$# != 0 ]
 then
 	if [ \$1 = \"-h\" ]
@@ -36,5 +36,5 @@ then
 fi
 #write progrum
 
-cd \$PLACE" >> ${NAME}
+cd \$PLACE${NAME%.*}" >> ${NAME}
 cd $PLAcE

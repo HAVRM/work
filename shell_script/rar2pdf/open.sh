@@ -5,11 +5,11 @@ then
 	if [ $1 = "-h" ]
 	then
 		echo "圧縮ファイルを展開する"
-		echo ". unrar.sh"
+		echo ". open.sh"
 		return 0
 	fi
 fi
-. clear_space.sh ~/rar2pdf
+. clear_exword.sh ~/rar2pdf
 FILE=(`ls *.rar`)
 for arg in ${FILE[@]}
 do

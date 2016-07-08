@@ -5,7 +5,7 @@ then
 	if [ $1 = "-h" ]
 	then
 		echo ".epubからpdfを作る"
-		echo ". epub_pdf (pdf名) ((rar)ファイル名)"
+		echo ". epub_pdf (pdf名) (epubファイル名)"
 		return 0
 	fi
 fi
@@ -21,7 +21,7 @@ then
 	unrar e ${RAR} > /dev/null
 	echo -e "\r[#   ]変更\c"
 	cd ..
-	. clear_space.sh ${NAME}
+	. clear_exword.sh ${NAME}
 	cd ${NAME}
 	echo -e "\r[##  ]変換\c"
 	PHT=(`ls | grep -i .epub`)

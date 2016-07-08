@@ -12,7 +12,7 @@
 NAME="***" #PC username ___@...:~$
 PASS="***" #PC password
 GITNAME="***" #github username
-GITMAIL="******@gmail.com" #github mail address
+GITMAIL="***@gmail.com" #github mail address
 GITPASS="***" #github password
 
 update_upgrade()

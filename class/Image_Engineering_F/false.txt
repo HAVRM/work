@@ -1,1 +1,2 @@
-bash: ./.houghline2: そのようなファイルやディレクトリはありません
+init done 
+opengl support available 

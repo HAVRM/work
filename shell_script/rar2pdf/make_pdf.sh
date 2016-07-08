@@ -37,7 +37,7 @@ then
 	rm -f ${RAR} 2> /dev/null
 	echo -e "\r${FT}[#      ]変更\c"
 	cd ..
-	. clear_space.sh ${NAME}
+	. clear_exword.sh ${NAME}
 	cd ${NAME}
 	ls | grep -v -i -e .png -e .jpg -e .bmp -e .tif | xargs rm -rf
 	echo -e "\r${FT}[##     ]圧縮1\c"
@@ -84,6 +84,9 @@ then
 	else
 		echo -e "\r${FT}[#######]終了\c"
 	fi
+	cd /tmp
+	ls | grep image | xargs rm -rf
+	cd ~/rar2pdf
 else
 	echo "please write param:\"name\" and \"rar file name\""
 fi

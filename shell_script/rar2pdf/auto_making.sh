@@ -9,6 +9,7 @@ then
 		return 0
 	fi
 fi
+MNUM=3
 if [ $# = 1 ]
 then
 	LOCA=$1
@@ -19,18 +20,18 @@ then
 	MNUM=$2
 fi
 set +m
-NUM=0
+WNUM=0
 RAR=(`ls | grep -i .rar`)
 for arg in ${RAR[@]}
 do
-	. make_pdf.sh ${arg%.*} ${arg} ${NUM} & > /dev/null
+	. make_pdf.sh ${arg%.*} ${arg} ${WNUM} & > /dev/null
 	echo -e "\rstarting "${arg%.*}" by $!"
-	NUM=`expr ${NUM} + 1`
-	if [ $NUM = $MNUM ]
+	WNUM=`expr ${WNUM} + 1`
+	if [ $WNUM = $MNUM ]
 	then
 		wait
 		echo ""
-		NUM=0
+		WNUM=0
 		if [ $# != 0 ]
 		then
 			cd /windows/pdf
