@@ -4,13 +4,16 @@
 #ubuntu14.04での動作確認済み
 #2016年ロボコンに関連するすべてのインストールを行う
 #下のNAME,PASS,GITNAME,GITMAIL,GITPASSの中を編集するGIT..はgithubにおけるもの
-#githubを使わない場合は147行目の"github_setting"の先頭に"#"をつければいい
+#インストールするものは関数化されていて一番最後のupdate_upgrade以下の行が
+#それぞれ何をインストールするかを指定している。インストールしなくていい物は
+#それが書かれている先頭に'#'をつければいい。
+#例: ros_install->#ros_install
 
-NAME="your_name"
-PASS="your_pass"
-GITNAME="your_github_name"
-GITMAIL="your_github_mail"
-GITPASS="your_github_pass"
+NAME="***" #PC username ___@...:~$
+PASS="***" #PC password
+GITNAME="***" #github username
+GITMAIL="***@gmail.com" #github mail address
+GITPASS="***" #github password
 
 update_upgrade()
 {
@@ -124,6 +127,7 @@ cd ~
 update_upgrade
 cd ~/catkin_ws/src
 git init
+git remote rm ros
 git remote add ros https://${GITNAME}:${GITPASS}@github.com/ROBOSTEP/ROS.git
 git fetch ros
 git checkout 2016_bezier
@@ -151,11 +155,11 @@ robostep
 robostep
 n
 __EOF__
-rm -f auto_vnc.sh
-echo "#!/bin/bash
-
-gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/auto_vnc.sh
-echo ". auto_vnc.sh" >> ~/.bashrc
+#rm -f .auto_vnc.sh
+#echo "#!/bin/bash
+#
+#gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/.auto_vnc.sh
+#echo ". .auto_vnc.sh" >> ~/.bashrc
 cd ~
 }
 

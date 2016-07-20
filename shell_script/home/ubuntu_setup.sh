@@ -88,7 +88,7 @@ cd opencv-2.4.9
 mkdir build
 cd build
 cmake -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON -D WITH_VTK=ON ..
-make -j
+make -j8
 echo $PASS | sudo -S make install
 sudo echo "/usr/local/lib"| sudo tee -a /etc/ld.so.conf.d/opencv.conf
 echo $PASS | sudo -S ldconfig

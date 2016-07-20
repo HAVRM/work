@@ -3,16 +3,16 @@
 #include <sys/time.h>
 
 int main(int arg,char *argv[]){
-//  cv::Mat src_img=cv::imread("avr6.JPG",CV_8UC1);
+  cv::Mat src_img=cv::imread("avr6.JPG",CV_8UC1);
 //  cv::Mat src_img=cv::imread("avr3.JPG",CV_8UC1);
-  cv::Mat src_img=cv::imread("avr10_spn.JPG",CV_8UC1);
+//  cv::Mat src_img=cv::imread("avr10_spn.JPG",CV_8UC1);
   cv::Mat chg_img;
   std::vector<std::vector<cv::Point> > cont;
   std::vector<cv::Vec4i> hier;
   if(!src_img.data)return -1;
-//  cv::threshold(src_img,chg_img,75,255,CV_THRESH_BINARY);
+  cv::threshold(src_img,chg_img,75,255,CV_THRESH_BINARY);
 //  cv::threshold(src_img,chg_img,125,255,CV_THRESH_BINARY);
-  cv::threshold(src_img,chg_img,130,255,CV_THRESH_BINARY);
+//  cv::threshold(src_img,chg_img,130,255,CV_THRESH_BINARY);
   cv::namedWindow("img1");
   cv::imshow("img1",src_img);
   cv::namedWindow("img2");
