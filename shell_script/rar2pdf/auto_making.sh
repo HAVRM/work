@@ -9,6 +9,14 @@ then
 		return 0
 	fi
 fi
+set +m
+. rar_make.sh
+echo " "
+EPUB=(`ls | grep -i .epub`)
+for arg in ${EPUB[@]}
+do
+	. epub_pdf.sh ${arg%.*} ${arg}
+done
 MNUM=3
 if [ $# = 1 ]
 then
@@ -19,7 +27,6 @@ then
 	LOCA=$1
 	MNUM=$2
 fi
-set +m
 WNUM=0
 RAR=(`ls | grep -i .rar`)
 for arg in ${RAR[@]}
@@ -38,12 +45,16 @@ do
 			PHT=(`ls`)
 			for arg in ${PHT[@]}
 			do
+				arg2=${arg%.*}
+				arg2="${arg2}.rar"
 				mv ${arg} ${LOCA}${arg}
+				mv ~/rar2pdf/done_file/${arg2} ${LOCA}done_file/${arg2}
 			done
 			cd ~/rar2pdf
 		fi
+		echo " "
 	fi
 done
 wait
-echo ""
+echo " "
 set -m

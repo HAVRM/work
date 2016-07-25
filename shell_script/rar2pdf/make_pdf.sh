@@ -32,34 +32,34 @@ then
 	then
 		echo ${NAME}
 	fi
-	echo -e "\r${FT}[       ]解凍\c"
+	echo -e "\r${FT}[        ]解凍\c"
 	unrar e ${RAR} > /dev/null 2> /dev/null
 	rm -f ${RAR} 2> /dev/null
-	echo -e "\r${FT}[#      ]変更\c"
+	echo -e "\r${FT}[#       ]変更\c"
 	cd ..
 	. clear_exword.sh ${NAME}
 	cd ${NAME}
-	ls | grep -v -i -e .png -e .jpg -e .bmp -e .tif | xargs rm -rf
-	echo -e "\r${FT}[##     ]圧縮1\c"
+	ls | grep -v -i -e .png -e .jpg -e .bmp -e .tif -e .jpeg | xargs rm -rf
+	echo -e "\r${FT}[##      ]圧縮1\c"
 	PHT=(`ls`)
 	if [ $# != 3 ]
 	then
-		ls | xargs -P0 -I{} convert {} done{}.png
+		ls | xargs -P0 -I{} convert {} done{}.png 2> /dev/null
 	else
-		ls | xargs -P2 -I{} convert {} done{}.png
+		ls | xargs -P2 -I{} convert {} done{}.png 2> /dev/null
 	fi
 	rm -f ${PHT[@]}
-	echo -e "\r${FT}[###    ]圧縮2\c"
+	echo -e "\r${FT}[###     ]圧縮2\c"
 	PHT=(`ls`)
 	if [ $# != 3 ]
 	then
-		ls | xargs -P0 -I{} convert {} done{}.jpg
+		ls | xargs -P0 -I{} convert {} done{}.jpg 2> /dev/null
 	else
-		ls | xargs -P2 -I{} convert {} done{}.jpg
+		ls | xargs -P2 -I{} convert {} done{}.jpg 2> /dev/null
 	fi
 	rm -f ${PHT[@]}
-	echo -e "\r${FT}              \c"
-	echo -e "\r${FT}[####   ]変名\c"
+	echo -e "\r${FT}               \c"
+	echo -e "\r${FT}[####    ]変名\c"
 	PHT=(`ls`)
 	FNU=`expr ${#PHT[*]} + 1`
 	FNUM=(`seq -w 1 ${FNU}`)
@@ -69,9 +69,24 @@ then
 		NUM=`expr ${NUM} + 1`
 		rm -f ${arg} ${arg%.*}.png
 	done
-	echo -e "\r${FT}[#####  ]変換\c"
-	convert *.jpg ${NAME}.pdf
-	echo -e "\r${FT}[###### ]整理\c"
+	echo -e "\r${FT}[#####   ]待機\c"
+	MEM=`. ~/rar2pdf/mem_check.sh`
+	sleep 2s
+	MEM2=`. ~/rar2pdf/mem_check.sh`
+	while [ ${MEM} -gt ${MEM2} ]
+	do
+		MEM=`. ~/rar2pdf/mem_check.sh`
+		sleep 2s
+		MEM2=`. ~/rar2pdf/mem_check.sh`
+	done
+	while [ ${MEM} -lt 50 ]
+	do
+		sleep 5s
+		MEM=`. ~/rar2pdf/mem_check.sh`
+	done
+	echo -e "\r${FT}[######  ]変換\c"
+	convert *.jpg ${NAME}.pdf 2> /dev/null
+	echo -e "\r${FT}[####### ]整理\c"
 	cd ..
 	mkdir -p /windows/pdf
 	mkdir -p done_file
@@ -80,9 +95,9 @@ then
 	rm -rf ${NAME}
 	if [ $# != 3 ]
 	then
-		echo -e "\r${FT}[#######]終了:${NAME}.pdf"
+		echo -e "\r${FT}[########]終了:${NAME}.pdf"
 	else
-		echo -e "\r${FT}[#######]終了\c"
+		echo -e "\r${FT}[########]終了\c"
 	fi
 	cd /tmp
 	ls | grep image | xargs rm -rf

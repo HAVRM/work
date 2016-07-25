@@ -10,5 +10,10 @@ then
 		return 0
 	fi
 fi
-. move_all_sh.sh *** *** *** *** *** ***
+DATA=`date '+%m%d_%H%M_%S'`
+. move_all_sh.sh *** *** *** *** ***
+cd ~/work
+git add -A
+git commit -m "${DATA}"
+git push work master
 cd $PLACE
