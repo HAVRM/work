@@ -2,8 +2,7 @@
 
 #インターネット接続状態で実行
 #ubuntu14.04での動作確認済み
-#2016年ロボコンに関連するすべてのインストールを行う
-#下のNAME,PASS,GITNAME,GITMAIL,GITPASSの中を編集するGIT..はgithubにおけるもの
+#下のNAME,PASSの中を編集する
 #インストールするものは関数化されていて一番最後のupdate_upgrade以下の行が
 #それぞれ何をインストールするかを指定している。インストールしなくていい物は
 #それが書かれている先頭に'#'をつければいい。
@@ -11,9 +10,6 @@
 
 NAME="***" #PC username ___@...:~$
 PASS="***" #PC password
-GITNAME="***" #github username
-GITMAIL="***@gmail.com" #github mail address
-GITPASS="***" #github password
 
 update_upgrade()
 {
@@ -23,9 +19,9 @@ echo $PASS | sudo -S apt-get -y upgrade
 
 ros_install()
 {
-echo "---ros_install---"
 cd ~
 update_upgrade
+echo "---ros_install---"
 echo $PASS | sudo -S apt-add-repository universe
 echo $PASS | sudo -S apt-add-repository multiverse
 echo $PASS | sudo -S apt-add-repository main
@@ -51,9 +47,9 @@ cd ~
 
 rosserial_install()
 {
-echo "---rosserial_install---"
 cd ~
 update_upgrade
+echo "---rosserial_install---"
 echo $PASS | sudo -S apt-get -y install ros-indigo-rosserial-arduino
 echo $PASS | sudo -S apt-get -y install ros-indigo-rosserial
 cd ~
@@ -61,9 +57,9 @@ cd ~
 
 LRF_install()
 {
-echo "---urg_node_install---"
 cd ~
 update_upgrade
+echo "---urg_node_install---"
 wget https://github.com/***/work/raw/master/install/urgwidget_driver.tar.gz
 tar xzvf urgwidget_driver.tar.gz
 mv urgwidget_driver ~/catkin_ws/src/urgwidget_driver
@@ -76,9 +72,9 @@ cd ~
 
 opencv_install()
 {
-echo "---open_cv_install---"
 cd ~
 update_upgrade
+echo "---open_cv_install---"
 echo $PASS | sudo -S apt-get -y install build-essential libgtk2.0-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev cmake python-dev python-numpy python-tk libtbb-dev libeigen3-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev libqt4-dev libqt4-opengl-dev sphinx-common texlive-latex-extra libv4l-dev libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev default-jdk ant libvtk5-qt4-dev
 mkdir ~/opencv_dir
 cd ~/opencv_dir
@@ -100,67 +96,26 @@ chmod +x build_all.sh
 cd ~
 }
 
-ar_tool_install()
+avr_install()
 {
-echo "---ar_tool_install---"
 cd ~
 update_upgrade
-wstool init ~/catkin_ws/src
-cd ~/catkin_ws
-wstool set -y --target-workspace=src ar_tools --git https://github.com/ar-tools/ar_tools.git
-wstool update ar_tools --target-workspace=src ar_tools
-cd ~/catkin_ws/src
-rosdep install -iy --from-paths ar_tools
-cd ~/catkin_ws
-source ~/.bashrc
-catkin_make
-echo $PASS | sudo -S apt-get -y install ros-indigo-camera-umd
-cd ~/catkin_ws/src
-rm -Rf ar_tools
+echo "---avr_install---"
+wget -O hidspx-2014-0306.tar.gz http://www-ice.yamagata-cit.ac.jp/ken/senshu/sitedev/index.php?plugin=attach\&refer=AVR%2FHIDaspx_news02\&openfile=hidspx-2014-0306.tar.gz
+tar zxvf hidspx-2014-0306.tar.gz
+rm -rf hidspx-2014-0306.tar.gz
+echo $PASS | sudo -S apt-get -y install gcc-avr binutils-avr avr-libc avrdude libusb-dev
+cd ~/hidspx-2014-0306/src
+make -j8
+echo $PASS | sudo -S make install
 cd ~
 }
 
-github_setting()
+arduino_install()
 {
-echo "---github_setting---"
-cd ~
+echo "---arduino_install---"
 update_upgrade
-cd ~/catkin_ws/src
-git init
-git remote rm ros
-git remote add ros https://${GITNAME}:${GITPASS}@github.com/ROBOSTEP/ROS.git
-git fetch ros
-git checkout 2016_bezier
-git merge ros/2016_bezier
-git config --global user.name "${GITNAME}"
-git config --global user.email "${GITMAIL}"
-cd ~/catkin_ws/src/Robocon_2016/shell_script
-echo "d" | . make_route.sh
-. catkin_make.sh
-cp set_ros.sh ~/set_ros.sh
-cp rosserial.sh ~/rosserial.sh
-cd ~
-}
-
-tiger_vnc_install()
-{
-echo "---vnc_install---"
-cd ~
-update_upgrade
-echo $PASS | sudo -S add-apt-repository ppa:ikuya-fruitsbasket/tigervnc
-echo $PASS | sudo -S apt-get update
-echo $PASS | sudo -S apt-get -y install tigervncserver
-tigervncpasswd <<\__EOF__
-robostep
-robostep
-n
-__EOF__
-#rm -f .auto_vnc.sh
-#echo "#!/bin/bash
-#
-#gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/.auto_vnc.sh
-#echo ". .auto_vnc.sh" >> ~/.bashrc
-cd ~
+echo $PASS | sudo -S apt-get -y install arduino
 }
 
 other_install()
@@ -173,15 +128,13 @@ cd ~
 }
 
 echo "yor name is ${NAME}, password is ${PASS}"
-echo "your github name is ${GITNAME}, mail is ${GITMAIL}, password is ${GITPASS}"
 update_upgrade
 ros_install
 rosserial_install
 LRF_install
 opencv_install
-ar_tool_install
-github_setting
-tiger_vnc_install
+avr_install
+arduino_install
 other_install
 update_upgrade
 cd ~
