@@ -34,6 +34,7 @@ then
 	mv ${NAME}/${NAME}.pdf /windows/pdf/${NAME}.pdf 2> /dev/null
 	rm -rf ${NAME}
 	echo -e "\r[####]終了:${NAME}.pdf"
+	echo " "
 else
 	echo "please write param:\"name\" and \"rar file name\""
 fi

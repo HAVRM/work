@@ -1,4 +1,8 @@
 #!/bin/bash
 
-NAME="***"
-sed -i -e "s/${NAME}/***/" ~/work/shell_script/home/update_upgrade.sh
+if [ 09 -ge 9 ]
+then
+	echo "a"
+else
+	echo "b"
+fi

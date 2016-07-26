@@ -17,11 +17,25 @@ for arg in ${EPUB[@]}
 do
 	. epub_pdf.sh ${arg%.*} ${arg}
 done
-MNUM=3
+if [ $# != 0 ]
+then
+	cd /windows/pdf
+	PHT=(`ls`)
+	for arg in ${PHT[@]}
+	do
+		arg2=${arg%.*}
+		mv ${arg} ${LOCA}${arg}
+		arg2="${arg2}.epub"
+		mv ~/rar2pdf/done_file/${arg2} ${LOCA}done_file/${arg2}
+	done
+	cd ~/rar2pdf
+fi
+echo " "
+MNUM=4
 if [ $# = 1 ]
 then
 	LOCA=$1
-	MNUM=3
+	MNUM=4
 elif [ $# = 2 ]
 then
 	LOCA=$1
@@ -56,5 +70,18 @@ do
 	fi
 done
 wait
+if [ $# != 0 ]
+then
+	cd /windows/pdf
+	PHT=(`ls`)
+	for arg in ${PHT[@]}
+	do
+		arg2=${arg%.*}
+		arg2="${arg2}.rar"
+		mv ${arg} ${LOCA}${arg}
+		mv ~/rar2pdf/done_file/${arg2} ${LOCA}done_file/${arg2}
+	done
+	cd ~/rar2pdf
+fi
 echo " "
 set -m

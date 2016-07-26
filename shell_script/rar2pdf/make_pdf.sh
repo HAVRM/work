@@ -12,6 +12,7 @@ fi
 NAME=$1
 RAR=$2
 NUM=0
+FT=""
 if [ $# = 3 ]
 then
 	while [ $NUM -lt $3 ]
@@ -20,8 +21,6 @@ then
 		NUM=`expr ${NUM} + 1`
 	done
 	NUM=0
-else
-	FT=""
 fi
 if [ $# != 0 ]
 then
