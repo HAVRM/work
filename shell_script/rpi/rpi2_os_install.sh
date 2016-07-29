@@ -99,9 +99,6 @@ __EOF__
 	mkdir ~/usb
 	echo $PASS | sudo -S mount ${PMP2} ~/usb
 	echo $PASS | sudo -S cp ~/rpi2/rpi_ubuntu_setup.sh ~/usb/home/ubuntu/rpi_ubuntu_setup.sh
-	echo $PASS | sudo -S cp ~/rpi2/urgwidget_driver.tar.gz ~/usb/home/ubuntu/urgwidget_driver.tar.gz
-	DATA=(`ls hidspx*`)
-	echo $PASS | sudo -S cp ~/rpi2/$DATA ~/usb/home/ubuntu/$DATA
 	echo $PASS | sudo -S umount ${PMP2}
 	rmdir ~/usb
 elif [ $2 = "raspbian" ]
