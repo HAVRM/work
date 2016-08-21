@@ -10,6 +10,17 @@ then
 	fi
 fi
 set +m
+MNUM=4
+if [ $# = 1 ]
+then
+	LOCA=$1
+	MNUM=4
+elif [ $# = 2 ]
+then
+	LOCA=$1
+	MNUM=$2
+fi
+WNUM=0
 . rar_make.sh
 echo " "
 EPUB=(`ls | grep -i .epub`)
@@ -31,17 +42,6 @@ then
 	cd ~/rar2pdf
 fi
 echo " "
-MNUM=4
-if [ $# = 1 ]
-then
-	LOCA=$1
-	MNUM=4
-elif [ $# = 2 ]
-then
-	LOCA=$1
-	MNUM=$2
-fi
-WNUM=0
 RAR=(`ls | grep -i .rar`)
 for arg in ${RAR[@]}
 do
