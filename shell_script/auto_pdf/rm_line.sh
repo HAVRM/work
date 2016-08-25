@@ -15,14 +15,14 @@ IFS=$'\n'
 DATA=(`cat new_pdf.txt`)
 rm -rf new_pdf.txt >> /dev/null 2> /dev/null
 LIM=`date '+%y%m%d%H'`
-LIM=`expr $LIM - 1000000`
+LIM=`expr $LIM - 10000`
 NUM=0
 for arg in ${DATA[@]}
 do
 	if [ $NUM = 0 ]
 	then
 		LIM=$arg
-		LIM=`expr $LIM - 1000000`
+		LIM=`expr $LIM - 10000`
 		NUM=1
 	fi
 	expr $arg + 1 > /dev/null 2>&1

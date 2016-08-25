@@ -7,10 +7,12 @@ then
 	then
 		echo "address_pdf.shから\"アドレス 題名\"の形式で読み込み、ダウンロードする"
 		echo "new_pdf.txtに変更ありの場合記載する"
+		echo "自分のドロップボックスに転送する"
 		echo ". auto_get_pdf.sh"
 		return 0
 	fi
 fi
+set +m
 NUM=0
 REN=0
 NAME=""
@@ -22,6 +24,11 @@ do
 	then
 		NAME=$arg
 		THE=`ls ${NAME} 2> /dev/null`
+		if [ ! $THE ]
+		then
+			THE="no_file"
+		fi
+		echo "start:${NAME}"
 		if [ $THE = $NAME ]
 		then
 			wget -O temp_${NAME} ${ADDR} >> /dev/null 2> /dev/null
@@ -40,6 +47,7 @@ do
 					REN=1
 				fi
 				. write_little_endian.sh new_pdf.txt ${NAME}
+				. dropbox_uploader.sh upload ${NAME} ${NAME} >> /dev/null 2> error.txt &
 			fi
 		else
 			wget -O ${NAME} ${ADDR} >> /dev/null 2> /dev/null
@@ -49,7 +57,9 @@ do
 				REN=1
 			fi
 			. write_little_endian.sh new_pdf.txt ${NAME}
+			. dropbox_uploader.sh upload ${NAME} ${NAME} >> /dev/null 2> error.txt &
 		fi
+		echo "end  :${NAME}"
 		NUM=0
 	else
 		ADDR=$arg
@@ -62,4 +72,8 @@ then
 	. write_little_endian.sh new_pdf.txt ${DATA}
 fi
 . rm_line.sh
+. dropbox_uploader.sh upload new_pdf.txt new_pdf.txt >> /dev/null 2> error.txt &
+echo "waiting for finish uploading"
+wait
+set -m
 cd $PLACEauto_get_pdf
