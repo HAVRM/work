@@ -5,7 +5,7 @@ if [ $# != 0 ]
 then
 	if [ $1 = "-h" ]
 	then
-		echo "address_pdf.shから\"アドレス 題名\"の形式で読み込み、ダウンロードする"
+		echo "address_pdf.txtから\"アドレス 題名\"の形式で読み込み、ダウンロードする"
 		echo "new_pdf.txtに変更ありの場合記載する"
 		echo "自分のドロップボックスに転送する"
 		echo ". auto_get_pdf.sh"
@@ -17,18 +17,18 @@ NUM=0
 REN=0
 NAME=""
 ADDR=""
-DATA=(`cat address_pdf.sh`)
+DATA=(`cat address_pdf.txt`)
 for arg in ${DATA[@]}
 do
 	if [ $NUM = 1 ]
 	then
-		NAME=$arg
+		NAME=${arg}.pdf
 		THE=`ls ${NAME} 2> /dev/null`
 		if [ ! $THE ]
 		then
 			THE="no_file"
 		fi
-		echo "start:${NAME}"
+		echo ${NAME}
 		if [ $THE = $NAME ]
 		then
 			wget -O temp_${NAME} ${ADDR} >> /dev/null 2> /dev/null
@@ -59,11 +59,13 @@ do
 			. write_little_endian.sh new_pdf.txt ${NAME}
 			. dropbox_uploader.sh upload ${NAME} ${NAME} >> /dev/null 2> error.txt &
 		fi
-		echo "end  :${NAME}"
 		NUM=0
 	else
-		ADDR=$arg
-		NUM=1
+		ADDR=http://pdfnovels.net/${arg}/main.pdf
+		if [ `echo ${arg} | grep n` ]
+		then
+			NUM=1
+		fi
 	fi
 done
 if [ $REN = 1 ]
