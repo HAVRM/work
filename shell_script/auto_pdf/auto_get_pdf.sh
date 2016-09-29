@@ -13,6 +13,13 @@ then
 	fi
 fi
 set +m
+cd /home/ubuntu/auto_pdf/
+rm -rf result.txt error.txt >/dev/null 2>&1
+DATA=`date +%m%d/%H`
+echo $DATA >>result.txt
+echo "" >>result.txt
+. dropbox_uploader.sh download address_pdf.txt address_pdf.txt >>result.txt 2>error.txt &
+wait
 NUM=0
 REN=0
 NAME=""
@@ -23,41 +30,41 @@ do
 	if [ $NUM = 1 ]
 	then
 		NAME=${arg}.pdf
-		THE=`ls ${NAME} 2> /dev/null`
+		THE=`ls ${NAME} 2>/dev/null`
 		if [ ! $THE ]
 		then
 			THE="no_file"
 		fi
-		echo ${NAME}
-		if [ $THE = $NAME ]
+		echo ${ADDR} >>result.txt
+		echo ${ADDR}
+		if [ ${THE} = ${NAME} ]
 		then
-			wget -O temp_${NAME} ${ADDR} >> /dev/null 2> /dev/null
-			NOW=$(du -k ${NAME} | awk '{print $1}')
-			NEW=$(du -k temp_${NAME} | awk '{print $1}')
-			DIFF=`expr $NEW - $NOW`
-			if [ $DIFF = 0 ]
+			wget -O temp_${NAME} ${ADDR} >>result.txt 2>error.txt
+			NOW=$(wc -c ${NAME} | awk '{print $1}')
+			NEW=$(wc -c temp_${NAME} | awk '{print $1}')
+			if [ ${NOW} -ge ${NEW} ]
 			then
-				rm -rf temp_${NAME} >> /dev/null 2> /dev/null
+				rm -rf temp_${NAME} >>result.txt 2>/dev/null
 			else
-				rm -rf ${NAME} >> /dev/null 2> /dev/null
+				rm -rf ${NAME} >>result.txt 2>/dev/null
 				mv temp_${NAME} ${NAME}
 				if [ $REN = 0 ]
 				then
 					. write_little_endian.sh new_pdf.txt
 					REN=1
 				fi
-				. write_little_endian.sh new_pdf.txt ${NAME}
-				. dropbox_uploader.sh upload ${NAME} ${NAME} >> /dev/null 2> error.txt &
+				. write_little_endian.sh new_pdf.txt "new:${NAME}"
+				. dropbox_uploader.sh upload ${NAME} ${NAME} >>result.txt 2>error.txt &
 			fi
 		else
-			wget -O ${NAME} ${ADDR} >> /dev/null 2> /dev/null
+			wget -O ${NAME} ${ADDR} >>result.txt 2>error.txt
 			if [ $REN = 0 ]
 			then
 				. write_little_endian.sh new_pdf.txt
 				REN=1
 			fi
 			. write_little_endian.sh new_pdf.txt ${NAME}
-			. dropbox_uploader.sh upload ${NAME} ${NAME} >> /dev/null 2> error.txt &
+			. dropbox_uploader.sh upload ${NAME} ${NAME} >>result.txt 2>error.txt &
 		fi
 		NUM=0
 	else
@@ -68,14 +75,19 @@ do
 		fi
 	fi
 done
+DATA=`date '+%y%m%d%H'`
 if [ $REN = 1 ]
 then
-	DATA=`date '+%y%m%d%H'`
 	. write_little_endian.sh new_pdf.txt ${DATA}
 fi
 . rm_line.sh
-. dropbox_uploader.sh upload new_pdf.txt new_pdf.txt >> /dev/null 2> error.txt &
+. dropbox_uploader.sh upload new_pdf.txt new_pdf.txt >>result.txt 2>error.txt &
+echo "waiting for finish uploading" >>result.txt
 echo "waiting for finish uploading"
+wait
+. dropbox_uploader.sh upload error.txt error.txt >>/dev/null 2>&1 &
+. dropbox_uploader.sh upload result.txt result.txt >>/dev/null 2>&1 &
+echo "waiting for finish uploading report"
 wait
 set -m
 cd $PLACEauto_get_pdf

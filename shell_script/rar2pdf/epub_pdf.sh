@@ -31,13 +31,13 @@ then
 	then
 		echo ${NAME}
 	fi
-	echo -e "\r${FT}1解凍\c"
+	echo -e "\r${FT}00解凍\c"
 	unrar e ${RAR} > /dev/null
-	echo -e "\r${FT}2変更\c"
+	echo -e "\r${FT}02変更\c"
 	cd ..
 	. clear_exword.sh ${NAME}
 	cd ${NAME}
-	echo -e "\r${FT}3待機\c"
+	echo -e "\r${FT}04待機\c"
 	MEM=`. ~/rar2pdf/mem_check.sh`
 	sleep 2s
 	MEM2=`. ~/rar2pdf/mem_check.sh`
@@ -52,10 +52,10 @@ then
 		sleep 5s
 		MEM=`. ~/rar2pdf/mem_check.sh`
 	done
-	echo -e "\r${FT}4変換\c"
+	echo -e "\r${FT}06変換\c"
 	PHT=(`ls | grep -i .epub`)
 	ebook-convert ${PHT} ${NAME}.pdf > /dev/null
-	echo -e "\r${FT}5整理\c"
+	echo -e "\r${FT}08整理\c"
 	cd ..
 	mkdir -p /windows/pdf
 	mkdir -p done_file
@@ -64,9 +64,9 @@ then
 	rm -rf ${NAME}
 	if [ $# != 3 ]
 	then
-		echo -e "\r${FT}6終了:${NAME}.pdf"
+		echo -e "\r${FT}10終了:${NAME}.pdf"
 	else
-		echo -e "\r${FT}6終了\c"
+		echo -e "\r${FT}10終了\c"
 	fi
 else
 	echo "please write param:\"name\" and \"rar file name\""
