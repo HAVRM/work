@@ -1,0 +1,16 @@
+*L3GD20について
+秋月電子で購入できる
+[[ＳＴマイクロＬ３ＧＤ２０使用　３軸ジャイロセンサーモジュール::http://akizukidenshi.com/catalog/g/gK-06779/]]
+
+3軸のジャイロセンサで安価(￥750 2016/9/30現在)
+
+*ライブラリ
+mbedにてnucleo用のライブラリを公開している。SPI通信を使用する。
+[[L3GD20ライブラリ::https://developer.mbed.org/users/hirokimineshita/code/L3GD20/]]
+詳細はAPIにて記載
+まだ製作中のため通信関連等の最低限のものしかない。
+
+*使用について
+自分で実験した時、ドリフトがひどかったため、[[MMA7361 (アナログ出力)]]と組み合わせてカルマンフィルタを搭載したことで静止時の安定性は良くなったが、収束に時間がかかる。その時のプログラムは以下にある。
+[[L3GD20+MMA7361 カルマンフィルタ::https://developer.mbed.org/users/hirokimineshita/code/Nucleo_L3GD20_MMA7361_Kalman/]]
+時間のあるときにもう一度挑戦しようと考えている。

@@ -1,8 +1,9 @@
 #!/bin/bash
 
+#実行方法は 「. ubuntu_setup.sh」を端末で打ち込んで実行
 #インターネット接続状態で実行
-#ubuntu14.04用
-#下のNAME,PASS,GITNAME,GITMAIL,GITPASSの中を編集するGIT..はgithubにおけるもの
+#ubuntu14.04での動作確認済み
+#下のNAME,PASSの***を編集する（""は消さない）
 #インストールするものは関数化されていて一番最後のupdate_upgrade以下の行が
 #それぞれ何をインストールするかを指定している。インストールしなくていい物は
 #それが書かれている先頭に'#'をつければいい。
@@ -10,9 +11,6 @@
 
 NAME="***" #PC username ___@...:~$
 PASS="***" #PC password
-GITNAME="***" #github username
-GITMAIL="***@gmail.com" #github mail address
-GITPASS="***" #github password
 
 update_upgrade()
 {
@@ -119,96 +117,12 @@ rm -Rf ar_tools
 cd ~
 }
 
-github_setting()
-{
-echo "---github_setting---"
-cd ~
-update_upgrade
-mkdir work
-cd ~/work
-git init
-git remote rm work
-git remote add work https://${GITNAME}:${GITPASS}@github.com/***/work.git
-git fetch work
-git merge work/master
-git config --global user.name "${GITNAME}"
-git config --global user.email "${GITMAIL}"
-cd shell_script/home
-cp rm_~_file.sh ~/rm_~_file.sh
-cp update_upgrade.sh ~/update_upgrade.sh
-cd ~
-}
-
-tiger_vnc_install()
-{
-echo "---vnc_install---"
-cd ~
-update_upgrade
-echo $PASS | sudo -S add-apt-repository ppa:ikuya-fruitsbasket/tigervnc
-echo $PASS | sudo -S apt-get update
-echo $PASS | sudo -S apt-get -y install tigervncserver
-#tigervncpasswd <<\__EOF__
-#{vncpass}
-#{vncpass}
-#n
-#__EOF__
-#rm -f .auto_vnc.sh
-#echo "#!/bin/bash
-#
-#gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/.auto_vnc.sh
-#echo ". .auto_vnc.sh" >> ~/.bashrc
-cd ~
-}
-
-open_jtalk()
-{
-echo "---open-jtalk---"
-cd ~
-update_upgrade
-echo $PASS | sudo -S apt-get -y install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
-wget https://raw.githubusercontent.com/***/work/master/shell_script/home/talk.sh
-cd ~
-}
-
-st_linkv2()
-{
-echo "---st_linkv2---"
-cd ~
-update_upgrade
-echo $PASS | sudo -S apt-get -y install libusb-1.0
-wget https://raw.githubusercontent.com/***/work/master/install/49-stlinkv2-1.rules
-echo $PASS | sudo -S cp 49-stlinkv2-1.rules /etc/udev/rules.d
-echo $PASS | sudo -S udevadm control --reload-rules
-rm -rf 49-stlinkv2-1.rules
-cd ~
-}
-
-gcc4mbed()
-{
-echo "---gcc4mbed---"
-cd ~
-update_upgrade
-mkdir gcc4mbed
-cd gcc4mbed
-wget https://github.com/adamgreen/gcc4mbed/zipball/master
-echo $PASS | sudo -S apt-get -y install lib32z1 lib32ncurses5 lib32bz2-1.0
-unzip master
-cd ~
-}
-
 other_install()
 {
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git
-echo $PASS | sudo -S add-apt-repository ppa:mc3man/trusty-media <<\__EOF__
-
-__EOF__
-echo $PASS | sudo -S apt-get update
-echo $PASS | sudo -S apt-get -y install ffmpeg
-echo $PASS | sudo -S sh -c 'echo "HandleLidSwitch=ignore" >> /etc/systemd/logind.conf'
-echo $PASS | sudo -S restart systemd-logind
+echo $PASS | sudo -S apt-get -y install recordmydesktop
 cd ~
 }
 
@@ -220,8 +134,6 @@ rosserial_install
 LRF_install
 opencv_install
 ar_tool_install
-github_setting
-tiger_vnc_install
 other_install
 update_upgrade
 cd ~

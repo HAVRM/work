@@ -1,4 +1,0 @@
-contour_tracing.cpp: In function ‘int main(int, char**)’:
-contour_tracing.cpp:31:55: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘long int’ [-Wformat=]
-   printf("contour : find %d time : %d ms\n\r",max,diff);
-                                                       ^
