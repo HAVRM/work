@@ -10,7 +10,7 @@
 
 NAME="***" #PC username ___@...:~$
 PASS="***" #PC password
-GITNAME="***" #github username
+GITNAME="HAVRM" #github username
 GITMAIL="***@gmail.com" #github mail address
 GITPASS="***" #github password
 
@@ -63,7 +63,7 @@ LRF_install()
 echo "---urg_node_install---"
 cd ~
 update_upgrade
-wget https://github.com/***/work/raw/master/install/urgwidget_driver.tar.gz
+wget https://github.com/HAVRM/work/raw/master/install/urgwidget_driver.tar.gz
 tar xzvf urgwidget_driver.tar.gz
 mv urgwidget_driver ~/catkin_ws/src/urgwidget_driver
 roscd urgwidget_driver
@@ -96,6 +96,7 @@ export PKG_CONFIG_PATH"| sudo tee -a /etc/bash.bashrc
 cd ~/opencv_dir/opencv-2.4.9/samples/c
 chmod +x build_all.sh
 ./build_all.sh
+./facedetect --cascade="/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml" --scale=1.5 lena.jpg &
 cd ~
 }
 
@@ -115,7 +116,6 @@ source ~/.bashrc
 catkin_make
 echo $PASS | sudo -S apt-get -y install ros-indigo-camera-umd
 cd ~/catkin_ws/src
-rm -Rf ar_tools
 cd ~
 }
 
@@ -128,7 +128,7 @@ mkdir work
 cd ~/work
 git init
 git remote rm work
-git remote add work https://${GITNAME}:${GITPASS}@github.com/***/work.git
+git remote add work https://${GITNAME}:${GITPASS}@github.com/HAVRM/work.git
 git fetch work
 git merge work/master
 git config --global user.name "${GITNAME}"
@@ -136,6 +136,7 @@ git config --global user.email "${GITMAIL}"
 cd shell_script/home
 cp rm_~_file.sh ~/rm_~_file.sh
 cp update_upgrade.sh ~/update_upgrade.sh
+sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
 cd ~
 }
 
@@ -166,7 +167,7 @@ echo "---open-jtalk---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
-wget https://raw.githubusercontent.com/***/work/master/shell_script/home/talk.sh
+wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/talk.sh
 cd ~
 }
 
@@ -176,7 +177,7 @@ echo "---st_linkv2---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install libusb-1.0
-wget https://raw.githubusercontent.com/***/work/master/install/49-stlinkv2-1.rules
+wget https://raw.githubusercontent.com/HAVRM/work/master/install/49-stlinkv2-1.rules
 echo $PASS | sudo -S cp 49-stlinkv2-1.rules /etc/udev/rules.d
 echo $PASS | sudo -S udevadm control --reload-rules
 rm -rf 49-stlinkv2-1.rules
@@ -193,6 +194,71 @@ cd gcc4mbed
 wget https://github.com/adamgreen/gcc4mbed/zipball/master
 echo $PASS | sudo -S apt-get -y install lib32z1 lib32ncurses5 lib32bz2-1.0
 unzip master
+rm -rf master
+cd adamgreen*
+. linux_install
+cd ~
+}
+
+arduino()
+{
+echo "---arduino---"
+cd ~
+update_upgrade
+echo $PASS | sudo -S apt-get -y install arduino
+cd ~
+}
+
+avr()
+{
+echo "---avr---"
+cd ~
+update_upgrade
+echo $PASS | sudo -S apt-get -y install gcc-avr binutils-avr avr-libc avrdude libusb-dev
+wget https://github.com/HAVRM/work/raw/master/install/hidspx-2014-0306.tar.gz
+tar xzvf hidspx-2014-0306.tar.gz
+rm -rf hidspx-2014-0306.tar.gz
+cd ~/hidspx-2014-0306/src
+make
+echo $PASS | sudo -S make install
+cd ~
+mkdir AVR_mbed
+cd AVR_mbed
+git remote add AVR_mbed https://${GITNAME}:${GITPASS}@github.com/HAVRM/AVR_mbed.git
+git fetch AVR_mbed
+git merge AVR_mbed/master
+cd ~
+}
+
+xpresso_ide_pre()
+{
+echo "---xpresso_ide_pre---"
+cd ~
+update_upgrade
+echo $PASS | sudo -S apt-get -y install libgtk2.0-0:i386 libxtst6:i386 libpangox-1.0-0:i386 libpangoxft-1.0-0:i386 libidn11:i386 libglu1-mesa:i386 libncurses5:i386 libudev1:i386 libusb-1.0:i386 libusb-0.1:i386 gtk2-engines-murrine:i386 libnss3-1d:i386
+cd ~
+}
+
+wine()
+{
+echo "---wine---"
+cd ~
+update_upgrade
+echo $PASS | sudo -S add-apt-repository ppa:ubuntu-wine/ppa
+update_upgrade
+echo $PASS | sudo -S apt-get -y install wine1.7 winetricks
+}
+
+teamviewer()
+{
+echo "---teamviewer---"
+cd ~
+update_upgrade
+wget http://www.teamviewer.com/download/teamviewer_linux.deb
+echo $PASS | sudo -S dpkg --add-architecture i386
+update_upgrade
+echo $PASS | sudo -S apt-get -y install gdebi
+echo $PASS | sudo -S gdebi teamviewer_linux.deb
 cd ~
 }
 
@@ -222,6 +288,14 @@ opencv_install
 ar_tool_install
 github_setting
 tiger_vnc_install
+open_jtalk
+st_linkv2
+gcc4mbed
+arduino
+avr
+xpresso_ide_pre
+wine
+teamviewer
 other_install
 update_upgrade
 cd ~
