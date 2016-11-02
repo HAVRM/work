@@ -135,6 +135,7 @@ git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
 cd shell_script/home
 cp rm_~_file.sh ~/rm_~_file.sh
+. ~/rm_~_file.sh
 cp update_upgrade.sh ~/update_upgrade.sh
 sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
 cd ~
