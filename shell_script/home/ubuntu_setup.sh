@@ -32,7 +32,7 @@ echo $PASS | sudo -S apt-add-repository main
 echo $PASS | sudo -S apt-add-repository restricted
 echo $PASS | sudo -S sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
-echo $PASS | sudo -S apt-get update
+echo $PASS | sudo -S apt-get update 1>/dev/null 2>&1
 echo $PASS | sudo -S apt-get -y install ros-indigo-desktop-full
 echo $PASS | sudo -S rosdep init
 rosdep update
@@ -134,11 +134,6 @@ git fetch work
 git merge work/master
 git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
-cd shell_script/home
-cp rm_~_file.sh ~/rm_~_file.sh
-. ~/rm_~_file.sh
-cp update_upgrade.sh ~/update_upgrade.sh
-sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
 cd ~
 }
 
@@ -169,6 +164,7 @@ echo "---open-jtalk---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
+rm -rf talk.sh 1>/dev/null 2>&1
 wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/talk.sh
 cd ~
 }
@@ -269,7 +265,7 @@ other_install()
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git
+echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git calibre
 echo $PASS | sudo -S add-apt-repository ppa:mc3man/trusty-media <<\__EOF__
 
 __EOF__
@@ -278,6 +274,19 @@ echo $PASS | sudo -S apt-get -y install ffmpeg
 echo $PASS | sudo -S sh -c 'echo "HandleLidSwitch=ignore" >> /etc/systemd/logind.conf'
 echo $PASS | sudo -S restart systemd-logind
 cd ~
+}
+
+shell_install()
+{
+echo "---shell_install---"
+cd ~
+update_upgrade
+rm -rf rm_~_file.sh update_upgrade.sh make_shellscript.sh 1>/dev/null 2>&1
+wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/rm_~_file.sh
+wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/update_upgrade.sh
+wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/make_shellscript.sh
+sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
+. ~/rm_~_file.sh
 }
 
 echo "yor name is ${NAME}, password is ${PASS}"
@@ -299,5 +308,6 @@ xpresso_ide_pre
 wine
 teamviewer
 other_install
+shell_install
 update_upgrade
 cd ~
