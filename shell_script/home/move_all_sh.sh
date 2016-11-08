@@ -63,6 +63,9 @@ do
 	elif [ `echo ${arg} | grep -i "robocon"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "pepper_ws"` ]
+	then
+		:
 	else
 		arg2=${arg#*/}
 		if [ ${arg2} = ${arg2%/*} ]
