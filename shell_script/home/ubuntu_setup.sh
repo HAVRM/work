@@ -13,6 +13,7 @@ PASS="***" #PC password
 GITNAME="HAVRM" #github username
 GITMAIL="***@gmail.com" #github mail address
 GITPASS="***" #github password
+VNCPASS="***" #tigerVNC password
 
 update_upgrade()
 {
@@ -33,7 +34,7 @@ echo $PASS | sudo -S apt-add-repository restricted
 echo $PASS | sudo -S sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 echo $PASS | sudo -S apt-get update 1>/dev/null 2>&1
-echo $PASS | sudo -S apt-get -y install ros-indigo-desktop-full
+echo $PASS | sudo -S apt-get -y install ros-indigo-desktop-full ros-indigo-control-toolbox ros-indigo-controller-manager ros-indigo-transmission-interface ros-indigo-joint-limits-interface
 echo $PASS | sudo -S rosdep init
 rosdep update
 echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
@@ -145,16 +146,15 @@ update_upgrade
 echo $PASS | sudo -S add-apt-repository ppa:ikuya-fruitsbasket/tigervnc
 echo $PASS | sudo -S apt-get update
 echo $PASS | sudo -S apt-get -y install tigervncserver
-#tigervncpasswd <<\__EOF__
-#{vncpass}
-#{vncpass}
-#n
-#__EOF__
-#rm -f .auto_vnc.sh
-#echo "#!/bin/bash
-#
-#gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/.auto_vnc.sh
-#echo ". .auto_vnc.sh" >> ~/.bashrc
+tigervncpasswd <<\__EOF__
+${VNCPASS}
+${VNCPASS}
+n
+__EOF__
+rm -f vnc_start.sh
+echo "#!/bin/bash
+
+gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/vnc_start.sh
 cd ~
 }
 
@@ -252,11 +252,11 @@ teamviewer()
 echo "---teamviewer---"
 cd ~
 update_upgrade
-wget http://www.teamviewer.com/download/teamviewer_linux.deb
+wget https://download.teamviewer.com/download/teamviewer_i386.deb
 echo $PASS | sudo -S dpkg --add-architecture i386
 update_upgrade
 echo $PASS | sudo -S apt-get -y install gdebi
-echo $PASS | sudo -S gdebi teamviewer_linux.deb
+echo $PASS | sudo -S gdebi teamviewer_i386.deb
 cd ~
 }
 
