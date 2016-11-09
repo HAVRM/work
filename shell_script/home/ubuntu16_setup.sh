@@ -27,17 +27,16 @@ ros_install()
 echo "---ros_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-add-repository universe
+echo $PASS | sudo -S sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 echo $PASS | sudo -S apt-add-repository multiverse
 echo $PASS | sudo -S apt-add-repository main
 echo $PASS | sudo -S apt-add-repository restricted
-echo $PASS | sudo -S sh -c 'echo "deb http://packages.ros.org/ros/ubuntu trusty main" > /etc/apt/sources.list.d/ros-latest.list'
-wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+echo $PASS | sudo -S apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 0xB01FA116
 echo $PASS | sudo -S apt-get update 1>/dev/null 2>&1
-echo $PASS | sudo -S apt-get -y install ros-indigo-desktop-full ros-indigo-control-toolbox ros-indigo-controller-manager ros-indigo-transmission-interface ros-indigo-joint-limits-interface
+echo $PASS | sudo -S apt-get -y install ros-kinetic-desktop-full
 echo $PASS | sudo -S rosdep init
 rosdep update
-echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
+echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 echo $PASS | sudo -S apt-get -y install python-rosinstall
 mkdir -p ~/catkin_ws/src
@@ -158,7 +157,7 @@ gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwor
 cd ~
 }
 
-open_jtalk_install()
+open_jtalk()
 {
 echo "---open-jtalk---"
 cd ~
@@ -169,7 +168,7 @@ wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/talk.
 cd ~
 }
 
-st_linkv2_install()
+st_linkv2()
 {
 echo "---st_linkv2---"
 cd ~
@@ -182,7 +181,7 @@ rm -rf 49-stlinkv2-1.rules
 cd ~
 }
 
-gcc4mbed_install()
+gcc4mbed()
 {
 echo "---gcc4mbed---"
 cd ~
@@ -198,7 +197,7 @@ cd adamgreen*
 cd ~
 }
 
-arduino_install()
+arduino()
 {
 echo "---arduino---"
 cd ~
@@ -207,7 +206,7 @@ echo $PASS | sudo -S apt-get -y install arduino
 cd ~
 }
 
-avr_install()
+avr()
 {
 echo "---avr---"
 cd ~
@@ -228,7 +227,7 @@ git merge AVR_mbed/master
 cd ~
 }
 
-xpresso_ide_pre_install()
+xpresso_ide_pre()
 {
 echo "---xpresso_ide_pre---"
 cd ~
@@ -237,7 +236,7 @@ echo $PASS | sudo -S apt-get -y install libgtk2.0-0:i386 libxtst6:i386 libpangox
 cd ~
 }
 
-wine_install()
+wine()
 {
 echo "---wine---"
 cd ~
@@ -247,7 +246,7 @@ update_upgrade
 echo $PASS | sudo -S apt-get -y install wine1.7 winetricks
 }
 
-teamviewer_install()
+teamviewer()
 {
 echo "---teamviewer---"
 cd ~
@@ -258,17 +257,6 @@ update_upgrade
 echo $PASS | sudo -S apt-get -y install gdebi
 echo $PASS | sudo -S gdebi teamviewer_i386.deb
 cd ~
-}
-
-torch_install()
-{
-git clone https://github.com/torch/distro.git ~/torch --recursive
-cd ~/torch
-echo $PASS | sudo -S bash install-deps
-./install.sh <<\__EOF__
-yes
-__EOF__
-source ~/.bashrc
 }
 
 other_install()
@@ -310,15 +298,14 @@ opencv_install
 ar_tool_install
 github_setting
 tiger_vnc_install
-open_jtalk_install
-st_linkv2_install
-gcc4mbed_install
-arduino_install
-avr_install
-xpresso_ide_pre_install
-wine_install
-teamviewer_install
-torch_install
+open_jtalk
+st_linkv2
+gcc4mbed
+arduino
+avr
+xpresso_ide_pre
+wine
+teamviewer
 other_install
 shell_install
 update_upgrade

@@ -69,6 +69,12 @@ do
 	elif [ `echo ${arg} | grep -i "gcc4mbed"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "siggraph2016_colorization"` ]
+	then
+		:
+	elif [ `echo ${arg} | grep -i "torch"` ]
+	then
+		:
 	else
 		arg2=${arg#*/}
 		if [ ${arg2} = ${arg2%/*} ]
