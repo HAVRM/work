@@ -160,7 +160,7 @@ cd ~
 
 open_jtalk_install()
 {
-echo "---open-jtalk---"
+echo "---open_jtalk_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install open-jtalk open-jtalk-mecab-naist-jdic hts-voice-nitech-jp-atr503-m001
@@ -171,7 +171,7 @@ cd ~
 
 st_linkv2_install()
 {
-echo "---st_linkv2---"
+echo "---st_linkv2_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install libusb-1.0
@@ -184,7 +184,7 @@ cd ~
 
 gcc4mbed_install()
 {
-echo "---gcc4mbed---"
+echo "---gcc4mbed_install---"
 cd ~
 update_upgrade
 mkdir gcc4mbed
@@ -200,7 +200,7 @@ cd ~
 
 arduino_install()
 {
-echo "---arduino---"
+echo "---arduino_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install arduino
@@ -209,7 +209,7 @@ cd ~
 
 avr_install()
 {
-echo "---avr---"
+echo "---avr_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install gcc-avr binutils-avr avr-libc avrdude libusb-dev
@@ -230,7 +230,7 @@ cd ~
 
 xpresso_ide_pre_install()
 {
-echo "---xpresso_ide_pre---"
+echo "---xpresso_ide_pre_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install libgtk2.0-0:i386 libxtst6:i386 libpangox-1.0-0:i386 libpangoxft-1.0-0:i386 libidn11:i386 libglu1-mesa:i386 libncurses5:i386 libudev1:i386 libusb-1.0:i386 libusb-0.1:i386 gtk2-engines-murrine:i386 libnss3-1d:i386
@@ -239,7 +239,7 @@ cd ~
 
 wine_install()
 {
-echo "---wine---"
+echo "---wine_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S add-apt-repository ppa:ubuntu-wine/ppa
@@ -249,7 +249,7 @@ echo $PASS | sudo -S apt-get -y install wine1.7 winetricks
 
 teamviewer_install()
 {
-echo "---teamviewer---"
+echo "---teamviewer_install---"
 cd ~
 update_upgrade
 wget https://download.teamviewer.com/download/teamviewer_i386.deb
@@ -262,6 +262,8 @@ cd ~
 
 torch_install()
 {
+echo "---torch_install---"
+cd ~
 git clone https://github.com/torch/distro.git ~/torch --recursive
 cd ~/torch
 echo $PASS | sudo -S bash install-deps
@@ -269,6 +271,7 @@ echo $PASS | sudo -S bash install-deps
 yes
 __EOF__
 source ~/.bashrc
+cd ~
 }
 
 other_install()
