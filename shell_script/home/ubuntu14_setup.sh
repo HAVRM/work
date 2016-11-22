@@ -264,6 +264,7 @@ torch_install()
 {
 echo "---torch_install---"
 cd ~
+update_upgrade
 git clone https://github.com/torch/distro.git ~/torch --recursive
 cd ~/torch
 echo $PASS | sudo -S bash install-deps
@@ -279,7 +280,7 @@ other_install()
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git calibre v41-utils
+echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git calibre v41-utils expect
 echo $PASS | sudo -S add-apt-repository ppa:mc3man/trusty-media <<\__EOF__
 
 __EOF__

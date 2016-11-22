@@ -94,7 +94,8 @@ p
 
 w
 __EOF__
-	echo $PASS | sudo -S e2fsck -f ${PMP2}
+	sudo e2fsck -f ${PMP2}
+	#do not use 'echo $PASS | sudo -S' when e2fsck
 	echo $PASS | sudo -S resize2fs ${PMP2}
 elif [ $2 = "ubuntu16" ]
 then
