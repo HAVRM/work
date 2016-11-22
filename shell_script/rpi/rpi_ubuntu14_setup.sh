@@ -1,7 +1,7 @@
 #!/bin/bash
 
-USER="ubuntu"
-PASS="ubuntu"
+USER="***"
+PASS="***"
 GITNAME="HAVRM"
 GITMAIL="***@gmail.com"
 GITPASS="***"
@@ -17,9 +17,15 @@ PLACE=`pwd`
 PLACE=${PLACE##*/}
 if [ ${PLACE} != ${USER} ]
 then
-	if [ `ls /home/ | grep ${USER}` != ${USER} ]
+	NUSER=`ls /home/ | grep ${USER}`
+	if [ !${NUSER} ]
+	then
+		NUSER="ubuntu"
+	fi
+	if [ ${NUSER} != ${USER} ]
 	then
 		echo "ubuntu" | sudo -S useradd -m ${USER}
+		echo "ubuntu" | sudo -S usermod -G sudo ${USER}
 		echo "#!/bin/bash
 
 echo \"ubuntu\" | sudo -S passwd ${USER} <<\__EOF__
@@ -62,8 +68,8 @@ fi
 net_check()
 {
 echo "---net_check---"
-DATA=(`ping 8.8.8.8 -c 5 | grep "64 bytes from 8.8.8.8"`)
-if [ ! ${DATA} ]
+DATA=`ping 8.8.8.8 -c 5 | grep "64 bytes from 8.8.8.8"`
+if [ !${DATA} ]
 then
 	echo "this machine is not in the internet"
 	return -1
@@ -93,14 +99,14 @@ wireless_setup()
 echo "---wireless_setup---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S echo "
+echo $PASS | sudo -S sh -c 'echo "
 #The wireless interface
 auto wlan0
 iface wlan0 inet dhcp
 wpa-ssid ${SSID}
 wpa-ap-scan 1
 wpa-key-mgmt WPA-PSK
-wpa-psk ${WPA2}" >>/etc/network/interfaces
+wpa-psk ${WPA2}" >>/etc/network/interfaces'
 cd ~
 }
 
@@ -110,17 +116,17 @@ echo "---japanese_setup---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install xserver-xorg-video-fbturbo fonts-takao language-pack-ja language-pack-gnome-ja ibus-mozc
-echo $PASS | sudo -S echo "Section \"Device\"
+echo $PASS | sudo -S sh -c 'echo "Section \"Device\"
 	Identifier \"Raspberry Pi FBDEV\"
 	Driver \"fbturbo\"
 	Option \"fbdev\" \"/dev/fb0\"
 	Option \"SwapbuffersWait\" \"true\"
-EndSection" >>/etc/X11/xorg.conf
+EndSection" >>/etc/X11/xorg.conf'
 echo "Asia/Tokyo" | sudo tee /etc/timezone
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive tzdata
 echo $PASS | sudo -S locale-gen ja_JP.UTF-8
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive locales
-echo $PASS | sudo -S echo "LANG=\"ja_JP.UTF-8\"" >>/etc/default/locale
+echo $PASS | sudo -S sh -c 'echo "LANG=\"ja_JP.UTF-8\"" >>/etc/default/locale'
 echo $PASS | sudo -S sed -i -e "s/\"us\"/\"jp\"/" /etc/default/keyboard
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive keyboard-configuration
 cd ~
@@ -220,10 +226,13 @@ update_upgrade
 base_install
 wireless_setup
 japanese_setup
-desktop_install
+#desktop_install
 web_server_install
 #file_server_install
 other_install
 shell_install
 update_upgrade
+cd ~
+PLACE=`pwd`
+sed -i -e "s/.\ ${PLACE}/rpi_ubuntu14_setup.sh//" ${PLACE}/.bashrc
 cd $PLACErpi_ubuntu14_setup

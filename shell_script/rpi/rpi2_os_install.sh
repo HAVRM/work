@@ -97,6 +97,15 @@ __EOF__
 	sudo e2fsck -f ${PMP2}
 	#do not use 'echo $PASS | sudo -S' when e2fsck
 	echo $PASS | sudo -S resize2fs ${PMP2}
+	if [ `ls rpi_ubuntu14_setup.sh` ]
+	then
+		mkdir ~/usb
+		echo $PASS | sudo -S mount ${PMP2} ~/usb
+		echo $PASS | sudo -S cp rpi_ubuntu14_setup.sh ~/usb/home/ubuntu/rpi_ubuntu14_setup.sh
+		echo $PASS | sudo -S sh -c 'echo ". /home/ubuntu/rpi_ubuntu14_setup.sh" >>~/usb/home/ubuntu/.bashrc'
+		echo $PASS | sudo -S umount ${PMP2}
+		rmdir ~/usb
+	fi
 elif [ $2 = "ubuntu16" ]
 then
 	DATA=(`ls *rpi2-ubuntu16.img`)
