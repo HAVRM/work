@@ -214,9 +214,11 @@ cp -rf auto_pdf ~/auto_pdf
 echo "#!/bin/bash
 
 echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh
-0 1 * * * ./home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >.rpi2_u14_setup_sub.sh
+0 1 * * * . /home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >.rpi2_u14_setup_sub.sh
 . .rpi2_u14_setup_sub.sh
 rm -rf .rpi2_u14_setup_sub.sh
+chmod a+x /home/${USER}/auto_pdf/auto_get_pdf.sh
+chmod a+x /home/${USER}/update_upgrade.sh
 cd ~
 }
 
