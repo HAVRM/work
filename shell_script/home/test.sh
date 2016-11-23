@@ -31,11 +31,26 @@ PASS="***"
 
 #sed -i -e "s/.\ .rm_user_ru14su_su.sh//" ~/test.txt
 
+#echo "#!/bin/bash
+
+#echo \". .rm_user_ru14su_su\" >>/home/${USER}/.bashrc
+#echo \"echo \\\"${PASS}\\\" | sudo -S userdel -r ubuntu
+#if [ \\\$? = 0 ]
+#then
+#	rm -rf .rm_user_ru14su_su.sh
+#	sed -i -e \\\"s/.\ .rm_user_ru14su_su.sh//\\\" /home/${USER}/.bashrc\" >>.rm_user_ru14su_su.sh" >ru14su_sub.sh
+
+#echo "---net_check---"
+#ping 8.8.8.8 -c 5 | grep -q "icmp_seq=1"
+#if [ $? = 1 ]
+#then
+#	echo "this machine is not in the internet"
+#	return -1
+#else
+#	return 0
+#fi
+
 echo "#!/bin/bash
 
-echo \". .rm_user_ru14su_su\" >>/home/${USER}/.bashrc
-echo \"echo \\\"${PASS}\\\" | sudo -S userdel -r ubuntu
-if [ \\\$? = 0 ]
-then
-	rm -rf .rm_user_ru14su_su.sh
-	sed -i -e \\\"s/.\ .rm_user_ru14su_su.sh//\\\" /home/${USER}/.bashrc\" >>.rm_user_ru14su_su.sh" >ru14su_sub.sh
+echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${NAME}/auto_pdf/auto_get_pdf.sh
+0 1 * * * ./home/${NAME}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${NAME}'"

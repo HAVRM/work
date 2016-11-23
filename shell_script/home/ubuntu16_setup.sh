@@ -18,8 +18,9 @@ VNCPASS="***" #tigerVNC password
 update_upgrade()
 {
 echo "---update_upgrade---"
-echo $PASS | sudo -S apt-get update 1>/dev/null 2>&1
-echo $PASS | sudo -S apt-get -y upgrade 1>/dev/null 2>&1
+echo $PASS | sudo -S apt-get update | tr '\n' '\r'
+echo ""
+echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 }
 
 ros_install()

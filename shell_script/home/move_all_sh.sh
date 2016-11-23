@@ -75,6 +75,9 @@ do
 	elif [ `echo ${arg} | grep -i "torch"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "rpi2_u14_work"` ]
+	then
+		:
 	else
 		arg2=${arg#*/}
 		if [ ${arg2} = ${arg2%/*} ]

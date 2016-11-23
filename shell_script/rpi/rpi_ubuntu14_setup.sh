@@ -8,6 +8,7 @@ GITPASS="***"
 SSID="***"
 WPA2="***"
 DSKP="gnome" #"gnome","lubuntu","xubuntu","kubuntu"
+WIFIMODULE="WN-G150UM"
 
 user_set()
 {
@@ -68,8 +69,8 @@ fi
 net_check()
 {
 echo "---net_check---"
-DATA=`ping 8.8.8.8 -c 5 | grep "64 bytes from 8.8.8.8"`
-if [ !${DATA} ]
+ping 8.8.8.8 -c 5 | grep -q "icmp_seq=1"
+if [ $? = 1 ]
 then
 	echo "this machine is not in the internet"
 	return -1
@@ -81,8 +82,9 @@ fi
 update_upgrade()
 {
 echo "---update_upgrade---"
-echo $PASS | sudo -S apt-get update 1>/dev/null 2>&1
-echo $PASS | sudo -S apt-get -y upgrade 1>/dev/null 2>&1
+echo $PASS | sudo -S apt-get update | tr '\n' '\r'
+echo ""
+echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 }
 
 base_install()
@@ -90,7 +92,7 @@ base_install()
 echo "---base_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install dphys-swapfile linux-firmware openssh-server ssh wireless-tools
+echo $PASS | sudo -S apt-get -y install dphys-swapfile linux-firmware openssh-server ssh
 cd ~
 }
 
@@ -99,14 +101,18 @@ wireless_setup()
 echo "---wireless_setup---"
 cd ~
 update_upgrade
+echo $PASS | sudo -S apt-get -y install wireless-tools wpasupplicant
+if [ $WIFIMODULE = "WN-G150UM" ]
+then
+	echo $PASS | sudo -S sh -c 'echo "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTR{idVendor}==\"04bb\", ATTR{idProduct}==\"094c\", RUN+=\"/sbin/modprobe -qba 8192cu\"" >>/etc/udev/rules.d/network_drivers.rules'
+	echo $PASS | sudo -S sh -c 'echo "install 8192cu /sbin/modprobe --ignore-install 8192cu $CMDLINE_OPTS; /bin/echo \"04bb 094c\" > /sys/bus/usb/drivers/rtl8192cu/new_id" >>/etc/modprobe.d/network_drivers.conf'
+fi
+echo $PASS | sudo -S ifconfig wlan0 up
+echo $PASS | sudo -S sh -c "sudo wpa_passphrase ${SSID} ${WPA2} >>/etc/wpa_supplicant/wpa_supplicant.conf"
 echo $PASS | sudo -S sh -c 'echo "
-#The wireless interface
-auto wlan0
+allow-hotplug wlan0
 iface wlan0 inet dhcp
-wpa-ssid ${SSID}
-wpa-ap-scan 1
-wpa-key-mgmt WPA-PSK
-wpa-psk ${WPA2}" >>/etc/network/interfaces'
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
 cd ~
 }
 
@@ -115,18 +121,7 @@ japanese_setup()
 echo "---japanese_setup---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install xserver-xorg-video-fbturbo fonts-takao language-pack-ja language-pack-gnome-ja ibus-mozc
-echo $PASS | sudo -S sh -c 'echo "Section \"Device\"
-	Identifier \"Raspberry Pi FBDEV\"
-	Driver \"fbturbo\"
-	Option \"fbdev\" \"/dev/fb0\"
-	Option \"SwapbuffersWait\" \"true\"
-EndSection" >>/etc/X11/xorg.conf'
 echo "Asia/Tokyo" | sudo tee /etc/timezone
-echo $PASS | sudo -S dpkg-reconfigure -f noninteractive tzdata
-echo $PASS | sudo -S locale-gen ja_JP.UTF-8
-echo $PASS | sudo -S dpkg-reconfigure -f noninteractive locales
-echo $PASS | sudo -S sh -c 'echo "LANG=\"ja_JP.UTF-8\"" >>/etc/default/locale'
 echo $PASS | sudo -S sed -i -e "s/\"us\"/\"jp\"/" /etc/default/keyboard
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive keyboard-configuration
 cd ~
@@ -195,6 +190,7 @@ rm -rf rm_~_file.sh update_upgrade.sh 1>/dev/null 2>&1
 wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/rm_~_file.sh
 wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/update_upgrade.sh
 sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
+sed -i -e "s/\/windows/~/" ~/rm_~_file.sh
 . ~/rm_~_file.sh
 cd ~
 }

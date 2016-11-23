@@ -18,8 +18,9 @@ VNCPASS="***" #tigerVNC password
 update_upgrade()
 {
 echo "---update_upgrade---"
-echo $PASS | sudo -S apt-get update 1>/dev/null 2>&1
-echo $PASS | sudo -S apt-get -y upgrade 1>/dev/null 2>&1
+echo $PASS | sudo -S apt-get update | tr '\n' '\r'
+echo ""
+echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 }
 
 ros_install()
@@ -307,6 +308,7 @@ sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
 echo "yor name is ${NAME}, password is ${PASS}"
 echo "your github name is ${GITNAME}, mail is ${GITMAIL}, password is ${GITPASS}"
 update_upgrade
+other_install
 ros_install
 rosserial_install
 LRF_install
@@ -323,7 +325,6 @@ xpresso_ide_pre_install
 wine_install
 teamviewer_install
 torch_install
-other_install
 shell_install
 update_upgrade
 cd ~
