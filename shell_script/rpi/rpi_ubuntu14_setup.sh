@@ -195,6 +195,31 @@ sed -i -e "s/\/windows/~/" ~/rm_~_file.sh
 cd ~
 }
 
+git_setup()
+{
+echo "---github_setup---"
+cd ~
+update_upgrade
+mkdir rpi2_u14_work
+cd ~/rpi2_u14_work
+git init
+git remote rm rpi2_u14_work
+git remote add rpi2_u14_work https://${GITNAME}:${GITPASS}@github.com/HAVRM/rpi2_u14_work.git
+git fetch rpi2_u14_work
+git merge rpi2_u14_work/master
+git config --global user.name "${GITNAME}"
+git config --global user.email "${GITMAIL}"
+echo ${PASS} | sudo -S cp -rf apache_html /var/www/html
+cp -rf auto_pdf ~/auto_pdf
+echo "#!/bin/bash
+
+echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh
+0 1 * * * ./home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >.rpi2_u14_setup_sub.sh
+. .rpi2_u14_setup_sub.sh
+rm -rf .rpi2_u14_setup_sub.sh
+cd ~
+}
+
 PLACErpi_ubuntu14_setup=`pwd`
 if [ $# != 0 ]
 then
@@ -227,6 +252,7 @@ web_server_install
 #file_server_install
 other_install
 shell_install
+git_setup
 update_upgrade
 cd ~
 PLACE=`pwd`
