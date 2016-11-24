@@ -177,7 +177,7 @@ other_install()
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install emacs24 imagemagick rar unrar pdftk screen git calibre v41-utils expect
+echo $PASS | sudo -S apt-get -y install emacs24 imagemagick unrar pdftk screen git calibre expect
 cd ~
 }
 
