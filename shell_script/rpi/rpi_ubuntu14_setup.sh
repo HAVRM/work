@@ -37,6 +37,12 @@ __EOF__" >.ru14su_sub.sh
 		rm -rf .ru14su_sub.sh
 	fi
 	echo "ubuntu" | sudo -S cp rpi_ubuntu14_setup.sh /home/${USER}/rpi_ubuntu14_setup.sh
+	echo "#!/bin/bash
+
+echo \"ubuntu\" | sudo -S sh -c 'echo \"setterm -blank 0\" >>/home/${USER}/.bashrc'" >.ru14su_sub.sh
+	. .ru14su_sub.sh
+	rm -rf .ru14su_sub.sh
+	echo "ubuntu" | sudo -S -i -u ${USER} setterm -blank 0
 	echo "ubuntu" | sudo -S -i -u ${USER} . /home/${USER}/rpi_ubuntu14_setup.sh
 	echo "#!/bin/bash
 
@@ -209,14 +215,14 @@ git fetch rpi2_u14_work
 git merge rpi2_u14_work/master
 git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
-echo ${PASS} | sudo -S cp -rf apache_html /var/www/html
+echo ${PASS} | sudo -S cp -rf apache_html/* /var/www/html
 cp -rf auto_pdf ~/auto_pdf
 echo "#!/bin/bash
 
 echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh
-0 1 * * * . /home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >.rpi2_u14_setup_sub.sh
-. .rpi2_u14_setup_sub.sh
-rm -rf .rpi2_u14_setup_sub.sh
+0 1 * * * . /home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+. /home/${USER}/.rpi2_u14_setup_sub.sh
+rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
 chmod a+x /home/${USER}/auto_pdf/auto_get_pdf.sh
 chmod a+x /home/${USER}/update_upgrade.sh
 cd ~

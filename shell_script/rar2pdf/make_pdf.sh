@@ -38,6 +38,12 @@ then
 	cd ..
 	. clear_exword.sh ${NAME}
 	cd ${NAME}
+	if [ $# != 3 ]
+	then
+		ls *.pdf 2>/dev/null | xargs -P0 -I{} convert -density 400 {} {}.png >/dev/null 2>&1
+	else
+		ls *.pdf 2>/dev/null | xargs -P2 -I{} convert -density 400 {} {}.png >/dev/null 2>&1
+	fi
 	ls | grep -v -i -e .png -e .jpg -e .bmp -e .tif -e .jpeg | xargs rm -rf
 	echo -e "\r${FT}[##      ]圧縮1\c"
 	PHT=(`ls`)
