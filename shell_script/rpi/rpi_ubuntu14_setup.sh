@@ -9,6 +9,7 @@ SSID="***"
 WPA2="***"
 DSKP="gnome" #"gnome","lubuntu","xubuntu","kubuntu"
 WIFIMODULE="WN-G150UM"
+OATK="***"
 
 user_set()
 {
@@ -51,7 +52,8 @@ echo \"echo \\\"${PASS}\\\" | sudo -S userdel -r ubuntu
 if [ \\\$? = 0 ]
 then
 	rm -rf .rm_user_ru14su_sub.sh
-	sed -i -e \\\"s/.\ .rm_user_ru14su_sub.sh//\\\" /home/${USER}/.bashrc\" >>/home/${USER}/.rm_user_ru14su_sub.sh" >.ru14su_sub.sh
+	sed -i -e \\\"s/.\ .rm_user_ru14su_sub.sh//\\\" /home/${USER}/.bashrc
+fi\" >>/home/${USER}/.rm_user_ru14su_sub.sh" >.ru14su_sub.sh
 	echo "ubuntu" | sudo -S -i -u ${USER} . .ru14su_sub.sh
 	rm -rf .ru14su_sub.sh
 	return 1
@@ -217,8 +219,10 @@ git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
 echo ${PASS} | sudo -S cp -rf apache_html/* /var/www/html
 cp -rf auto_pdf ~/auto_pdf
+echo $PASS | sudo -S sh -c "echo OAUTH_ACCESS_TOKEN=${OATK} >/home/${USER}/auto_pdf/.dropbox_uploader"
 echo "#!/bin/bash
 
+echo \". .rpi2_u14_setup_sub_ap.sh\" >>/home/${USER}/.bashrc
 echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh
 0 1 * * * . /home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
 . /home/${USER}/.rpi2_u14_setup_sub.sh
