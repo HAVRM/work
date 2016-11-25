@@ -305,6 +305,25 @@ sed -i -e "s/\*\*\*/${PASS}/" ~/update_upgrade.sh
 . ~/rm_~_file.sh
 }
 
+auto_comd_set()
+{
+echo "---auto_comd_set---"
+cd ~
+update_upgrade
+rm -rf shutdown_com.sh
+wget https://raw.githubusercontent.com/HAVRM/work/master/shell_script/home/shutdown_com.sh
+sed -i -e "s/\*\*\*/${NAME}/" ~/shutdown_com.sh
+chmod a+x /home/${NAME}/shutdown_com.sh
+echo "#! /bin/sh
+if test x\$RUNLEVEL = x0 -o x\$RUNLEVEL = x6 ; then
+	su - ${NAME} -c \"/home/${NAME}/shutdown_com.sh\"
+fi" >temp_init_rc
+cat /etc/init.d/rc >>temp_init_rc
+sudo cp -f temp_init_rc /etc/init.d/rc
+rm -rf temp_init_rc
+cd ~
+}
+
 echo "yor name is ${NAME}, password is ${PASS}"
 echo "your github name is ${GITNAME}, mail is ${GITMAIL}, password is ${GITPASS}"
 update_upgrade
@@ -326,5 +345,6 @@ wine_install
 teamviewer_install
 torch_install
 shell_install
+auto_comd_set
 update_upgrade
 cd ~
