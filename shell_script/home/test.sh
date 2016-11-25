@@ -49,5 +49,3 @@ PASS="***"
 #else
 #	return 0
 #fi
-
-echo "do shutdown" >> /home/***/test.txt
