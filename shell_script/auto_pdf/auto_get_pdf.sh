@@ -48,6 +48,7 @@ DATA=`date +%m%d/%H`
 echo $DATA >>result.txt
 echo "" >>result.txt
 . dropbox_uploader.sh download address_pdf.txt address_pdf.txt >>result.txt 2>error.txt &
+. dropbox_uploader.sh download new_pdf.txt new_pdf.txt >>result.txt 2>error.txt &
 wait
 NUM=0
 REN=0
