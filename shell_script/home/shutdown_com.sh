@@ -15,5 +15,5 @@ cd /home/***
 rm -rf sd_res.txt
 . github_ctrl.sh 1>sd_res.txt 2>&1
 cd rpi2_u14_work
-. sub_git.sh 1>/home/***/sd_res.txt 2>&1
+. sub_git.sh >>/home/***/sd_res.txt 2>&1
 cd $PLACEshutdown_com
