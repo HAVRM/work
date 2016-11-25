@@ -219,7 +219,7 @@ git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
 echo ${PASS} | sudo -S cp -rf apache_html/* /var/www/html
 cp -rf auto_pdf ~/auto_pdf
-sed -i -e "s/ubuntu/${USER}/" /home/${USER}/aut_pdf/auto_get_pdf.sh
+sed -i -e "s/ubuntu/${USER}/" /home/${USER}/auto_pdf/auto_get_pdf.sh
 echo $PASS | sudo -S sh -c "echo OAUTH_ACCESS_TOKEN=${OATK} >/home/${USER}/auto_pdf/.dropbox_uploader"
 echo "#!/bin/bash
 
