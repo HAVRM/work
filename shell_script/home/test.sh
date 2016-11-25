@@ -50,7 +50,9 @@ PASS="***"
 #	return 0
 #fi
 
-echo "#!/bin/bash
-
-echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${NAME}/auto_pdf/auto_get_pdf.sh
-0 1 * * * ./home/${NAME}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${NAME}'"
+echo "echo \"***\" | sudo -S userdel -r ubuntu
+if [ \$? = 0 ]
+then
+	rm -rf .rm_user_ru14su_sub.sh
+	sed -i -e \"s/.\ .rm_user_ru14su_sub.sh//\" /home/***/.bashrc
+fi"
