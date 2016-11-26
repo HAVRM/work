@@ -51,11 +51,11 @@ echo \". .rm_user_ru14su_sub.sh\" >>/home/${USER}/.bashrc
 echo \"echo \\\"${PASS}\\\" | sudo -S userdel -r ubuntu
 if [ \\\$? = 0 ]
 then
-	rm -rf .rm_user_ru14su_sub.sh
+	#rm -rf .rm_user_ru14su_sub.sh
 	sed -i -e \\\"s/.\ .rm_user_ru14su_sub.sh//\\\" /home/${USER}/.bashrc
-fi\" >>/home/${USER}/.rm_user_ru14su_sub.sh" >.ru14su_sub.sh
-	echo "ubuntu" | sudo -S -i -u ${USER} . .ru14su_sub.sh
-	rm -rf .ru14su_sub.sh
+fi\" >/home/${USER}/.rm_user_ru14su_sub.sh" >/home/ubuntu/.ru14su_sub.sh
+	echo "ubuntu" | sudo -S -i -u ${USER} . /home/ubuntu/.ru14su_sub.sh
+	rm -rf /home/ubuntu/.ru14su_sub.sh
 	return 1
 else
 	if [ ${USER} = "ubuntu" -a ${PASS} != "ubuntu" ]
@@ -223,9 +223,8 @@ sed -i -e "s/ubuntu/${USER}/" /home/${USER}/auto_pdf/auto_get_pdf.sh
 echo $PASS | sudo -S sh -c "echo OAUTH_ACCESS_TOKEN=${OATK} >/home/${USER}/auto_pdf/.dropbox_uploader"
 echo "#!/bin/bash
 
-echo \". .rpi2_u14_setup_sub_ap.sh\" >>/home/${USER}/.bashrc
-echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh
-0 1 * * * . /home/${USER}/update_upgrade.sh\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh >/dev/null 2>&1
+0 1 * * * . /home/${USER}/update_upgrade.sh >/dev/null 2>&1\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
 . /home/${USER}/.rpi2_u14_setup_sub.sh
 rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
 chmod a+x /home/${USER}/auto_pdf/auto_get_pdf.sh
@@ -248,7 +247,7 @@ fi
 user_set
 if [ $? = 1 ]
 then
-	echo ${PASS} | sudo -S reboot now
+	echo "ubuntu" | sudo -S reboot now
 	return 0
 fi
 net_check
@@ -268,6 +267,5 @@ shell_install
 git_setup
 update_upgrade
 cd ~
-PLACE=`pwd`
-sed -i -e "s/.\ ${PLACE}/rpi_ubuntu14_setup.sh//" ${PLACE}/.bashrc
+echo ${PASS} | sudo -S sed -i -e "s/.\ \/home\/ubuntu\/rpi_ubuntu14_setup.sh//" /home/ubuntu/.bashrc
 cd $PLACErpi_ubuntu14_setup
