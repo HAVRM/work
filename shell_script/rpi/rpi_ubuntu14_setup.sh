@@ -117,10 +117,20 @@ then
 fi
 echo $PASS | sudo -S ifconfig wlan0 up
 echo $PASS | sudo -S sh -c "sudo wpa_passphrase ${SSID} ${WPA2} >>/etc/wpa_supplicant/wpa_supplicant.conf"
+echo $PASS | sudo -S sed -i -e "s/eth0/wlan0/" /etc/network/interfaces
+echo $PASS | sudo -S sed -i -e "s/dhcp/static/" /etc/network/interfaces
 echo $PASS | sudo -S sh -c 'echo "
-allow-hotplug wlan0
-iface wlan0 inet dhcp
+address 192.168.1.13
+netmask 255.255.255.0
+network 192.168.1.0
+broadcast 192.168.1.255
+gateway 192.168.1.1
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
+echo $PASS | sudo -S sh -c 'echo "nameserver 192.168.1.1" >>/etc/resolvconf/resolv.conf.d/base'
+#echo $PASS | sudo -S sh -c 'echo "
+#allow-hotplug wlan0
+#iface wlan0 inet dhcp
+#wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
 cd ~
 }
 
@@ -129,7 +139,16 @@ japanese_setup()
 echo "---japanese_setup---"
 cd ~
 update_upgrade
+echo $PASS | sudo -S apt-get -y install language-pack-ja manpages-ja
+echo $PASS | sudo -S update-locale LANG=ja_JP.UTF-8
+export LANG=ja_JP.UTF-8
+echo "case \$TERM in
+     linux)LANG=C ;;
+     *)LANG=ja_JP.UTF-8 ;;
+esac" >>/home/${USER}/.bashrc
+LANG=C
 echo "Asia/Tokyo" | sudo tee /etc/timezone
+echo $PASS | sudo -S dpkg-reconfigure -f noninteractive tzdata
 echo $PASS | sudo -S sed -i -e "s/\"us\"/\"jp\"/" /etc/default/keyboard
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive keyboard-configuration
 cd ~
@@ -217,7 +236,11 @@ git fetch rpi2_u14_work
 git merge rpi2_u14_work/master
 git config --global user.name "${GITNAME}"
 git config --global user.email "${GITMAIL}"
-echo ${PASS} | sudo -S cp -rf apache_html/* /var/www/html
+echo ${PASS} | sudo -S rm -rf /var/www/*
+echo ${PASS} | sudo -S ln -s ~/rpi2_u14_work/html /var/www/
+mkdir ~/file
+chmod a+w ~/file
+echo ${PASS} | sudo -S ln -s ~/file ~/rpi2_u14_work/html
 cp -rf auto_pdf ~/auto_pdf
 sed -i -e "s/ubuntu/${USER}/" /home/${USER}/auto_pdf/auto_get_pdf.sh
 echo $PASS | sudo -S sh -c "echo OAUTH_ACCESS_TOKEN=${OATK} >/home/${USER}/auto_pdf/.dropbox_uploader"

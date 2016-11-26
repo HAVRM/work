@@ -107,6 +107,8 @@ __EOF__
 		cp ${PLACErpi2_os_install}/*.sh ~/usb/home/ubuntu/rpi/
 		echo $PASS | sudo -S sh -c 'echo ". /home/ubuntu/rpi_ubuntu14_setup.sh" >>~/usb/home/ubuntu/.bashrc'
 		echo $PASS | sudo -S sh -c 'echo "setterm -blank 0" >>~/usb/home/ubuntu/.bashrc'
+		echo $PASS | sudo -S sh -c 'echo "autologin-user=ubuntu
+autologin-user-timeout=0" >>~/usb/etc/lightdm/lightdm.conf'
 		echo $PASS | sudo -S umount ${PMP2}
 		rmdir ~/usb
 	fi

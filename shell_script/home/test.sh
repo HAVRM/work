@@ -52,12 +52,7 @@ PASS="***"
 #echo ${PASS} | sudo -S useradd -m tester
 #echo ${PASS} | sudo -S userdel -r tester
 
-echo "#!/bin/bash
-
-echo \". .rm_user_ru14su_sub.sh\" >>/home/${USER}/.bashrc
-echo \"echo \\\"${PASS}\\\" | sudo -S userdel -r ubuntu
-if [ \\\$? = 0 ]
-then
-	rm -rf .rm_user_ru14su_sub.sh
-	sed -i -e \\\"s/.\ .rm_user_ru14su_sub.sh//\\\" /home/${USER}/.bashrc
-fi\" >>/home/${USER}/.rm_user_ru14su_sub.sh" >ru14su_sub.sh
+echo "case \$TERM in
+     linux)LANG=C ;;
+     *)LANG=ja_JP.UTF-8 ;;
+esac"
