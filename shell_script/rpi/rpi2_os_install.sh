@@ -102,6 +102,9 @@ __EOF__
 		mkdir ~/usb
 		echo $PASS | sudo -S mount ${PMP2} ~/usb
 		echo $PASS | sudo -S cp rpi_ubuntu14_setup.sh ~/usb/home/ubuntu/rpi_ubuntu14_setup.sh
+		echo $PASS | sudo -S mkdir -p ~/usb/home/ubuntu/rpi
+		echo $PASS | sudo -S chmod a+w ~/usb/home/ubuntu/rpi/
+		cp ${PLACErpi2_os_install}/*.sh ~/usb/home/ubuntu/rpi/
 		echo $PASS | sudo -S sh -c 'echo ". /home/ubuntu/rpi_ubuntu14_setup.sh" >>~/usb/home/ubuntu/.bashrc'
 		echo $PASS | sudo -S sh -c 'echo "setterm -blank 0" >>~/usb/home/ubuntu/.bashrc'
 		echo $PASS | sudo -S umount ${PMP2}
