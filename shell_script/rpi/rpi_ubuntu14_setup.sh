@@ -204,7 +204,7 @@ other_install()
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install emacs24 imagemagick unrar pdftk screen git calibre expect
+echo $PASS | sudo -S apt-get -y install emacs24 imagemagick unrar pdftk screen git calibre expect curl
 cd ~
 }
 
@@ -246,10 +246,13 @@ sed -i -e "s/ubuntu/${USER}/" /home/${USER}/auto_pdf/auto_get_pdf.sh
 echo $PASS | sudo -S sh -c "echo OAUTH_ACCESS_TOKEN=${OATK} >/home/${USER}/auto_pdf/.dropbox_uploader"
 echo "#!/bin/bash
 
-echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh >/dev/null 2>&1
-0 1 * * * . /home/${USER}/update_upgrade.sh >/dev/null 2>&1\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * /bin/bash /home/${USER}/auto_pdf/auto_get_pdf.sh >/home/${USER}/cron_log/agp 2>&1
+0 1 * * * /bin/bash /home/${USER}/update_upgrade.sh >/home/${USER}/cron_log/uu 2>&1
+\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
 . /home/${USER}/.rpi2_u14_setup_sub.sh
 rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
+echo $PASS | sudo -s chown ${USER}:crontab /var/spool/cron/crontabs/${USER}
+mkdir ~/cron_log
 chmod a+x /home/${USER}/auto_pdf/auto_get_pdf.sh
 chmod a+x /home/${USER}/update_upgrade.sh
 cd ~

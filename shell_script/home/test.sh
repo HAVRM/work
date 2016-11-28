@@ -52,7 +52,6 @@ PASS="***"
 #echo ${PASS} | sudo -S useradd -m tester
 #echo ${PASS} | sudo -S userdel -r tester
 
-echo "case \$TERM in
-     linux)LANG=C ;;
-     *)LANG=ja_JP.UTF-8 ;;
-esac"
+nano tesnano <<\__EOF__
+asdf
+__EOF__
