@@ -276,6 +276,15 @@ source ~/.bashrc
 cd ~
 }
 
+qtcreator_install()
+{
+echo "---qtcreator_install---"
+cd ~
+update_upgrade
+echo $PASS | sudo -S apt-get -y install qtcreator libtulip-dev
+cd ~
+}
+
 other_install()
 {
 echo "---other_install---"
@@ -344,6 +353,7 @@ xpresso_ide_pre_install
 wine_install
 teamviewer_install
 torch_install
+qtcreator_install
 shell_install
 auto_comd_set
 update_upgrade
