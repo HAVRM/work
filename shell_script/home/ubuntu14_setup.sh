@@ -130,7 +130,6 @@ update_upgrade
 mkdir work
 cd ~/work
 git init
-git remote rm work
 git remote add work https://${GITNAME}:${GITPASS}@github.com/HAVRM/work.git
 git fetch work
 git merge work/master
@@ -223,6 +222,7 @@ echo $PASS | sudo -S make install
 cd ~
 mkdir AVR_mbed
 cd AVR_mbed
+git init
 git remote add AVR_mbed https://${GITNAME}:${GITPASS}@github.com/HAVRM/AVR_mbed.git
 git fetch AVR_mbed
 git merge AVR_mbed/master
