@@ -12,6 +12,7 @@ then
 fi
 #write progrum
 cd /home/***
+trash-empty
 rm -rf sd_res.txt
 . github_ctrl.sh 1>/home/***/sd_res.txt 2>&1
 cd rpi2_u14_work
