@@ -9,5 +9,3 @@ $ sudo apt-get install libgtk2.0-0:i386 libxtst6:i386 libpangox-1.0-0:i386 libpa
 インストーラーを[[LPCXpresso Linux Installer::https://www.lpcware.com/lpcxpresso/downloads/linux]]からダウンロード(約450MB)して展開し、インストーラーの実行ファイルを実行する。
 
 アクティベートしないと8kBまでしかデバックできない。会員登録しておけば無料でできる。アクティベートすることで256kBまで出来るようになる。
-
-
