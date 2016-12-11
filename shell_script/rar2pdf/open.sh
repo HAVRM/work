@@ -10,7 +10,7 @@ then
 	fi
 fi
 . clear_exword.sh ~/rar2pdf
-FILE=(`ls *.rar`)
+FILE=(`ls *.rar 2> /dev/null`)
 for arg in ${FILE[@]}
 do
 	echo ${arg}
@@ -21,7 +21,7 @@ do
 	rm -rf ${arg}
 	cd ..
 done
-FILE=(`ls *.zip`)
+FILE=(`ls *.zip 2> /dev/null`)
 for arg in ${FILE[@]}
 do
 	echo ${arg}
