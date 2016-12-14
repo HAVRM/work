@@ -74,23 +74,29 @@ then
 		NUM=`expr ${NUM} + 1`
 		rm -f ${arg} ${arg%.*}.png
 	done
-	echo -e "\r${FT}[#####   ]待機\c"
+	echo -e "\r${FT}[#####   ]待機_\c"
+	WAIT=`cat ~/rar2pdf/wait.txt`
+	while [ ${WAIT} != "0" ]
+	do
+		sleep 2s
+		WAIT=`cat ~/rar2pdf/wait.txt`
+	done
+	echo "1" > ~/rar2pdf/wait.txt
+	echo -e "\r${FT}[#####   ]待機 \c"
 	MEM=`. ~/rar2pdf/mem_check.sh`
 	sleep 2s
 	MEM2=`. ~/rar2pdf/mem_check.sh`
-	while [ ${MEM} -gt ${MEM2} ]
+	while [ ${MEM} -eq ${MEM2} -a ${MEM2} -lt 50 ]
 	do
 		MEM=`. ~/rar2pdf/mem_check.sh`
 		sleep 2s
 		MEM2=`. ~/rar2pdf/mem_check.sh`
 	done
-	while [ ${MEM} -lt 50 ]
-	do
-		sleep 5s
-		MEM=`. ~/rar2pdf/mem_check.sh`
-	done
 	echo -e "\r${FT}[######  ]変換\c"
-	convert *.jpg ${NAME}.pdf 2> /dev/null
+	convert *.jpg ${NAME}.pdf & 2> /dev/null
+	sleep 2s
+	echo "0" > ~/rar2pdf/wait.txt
+	wait
 	echo -e "\r${FT}[####### ]整理\c"
 	cd ..
 	mkdir -p /windows/pdf

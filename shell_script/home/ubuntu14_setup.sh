@@ -146,15 +146,19 @@ update_upgrade
 echo $PASS | sudo -S add-apt-repository ppa:ikuya-fruitsbasket/tigervnc
 echo $PASS | sudo -S apt-get update
 echo $PASS | sudo -S apt-get -y install tigervncserver
+rm -f ~/vnc_pass.sh ~/vnc_start.sh
+echo "#!/bin/bash
+
 tigervncpasswd <<\__EOF__
 ${VNCPASS}
 ${VNCPASS}
 n
-__EOF__
-rm -f vnc_start.sh
+__EOF__" >> ~/vnc_pass.sh
+. ~/vnc_pass.sh
 echo "#!/bin/bash
 
 gnome-terminal --geometry=0x0+0+0 -e 'bash -c \"x0vncserver -display :0 -passwordfile ~/.vnc/passwd\"'" >> ~/vnc_start.sh
+rm -f ~/vnc_pass.sh
 cd ~
 }
 

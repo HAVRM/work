@@ -32,6 +32,8 @@ else
 fi
 echo $PASS | sudo -S apt-get update | tr '\n' '\r'
 echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
+echo $PASS | sudo -S apt-get update | tr '\n' '\r'
+echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 umount ${PMP}
 umount ${PMP2}
 sleep 5s

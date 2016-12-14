@@ -7,9 +7,16 @@ GITMAIL="***@gmail.com"
 GITPASS="***"
 SSID="***"
 WPA2="***"
-DSKP="gnome" #"gnome","lubuntu","xubuntu","kubuntu"
+DSKP="gnome" #"gnome","lubuntu","xubuntu","kubuntu" can be select
+WIRELESS_ONLY="true" #"true" or "false", if "true" then you CANNOT use ethernet
+WIRELESS_IP="static" #"static" or "dhcp"
 WIFIMODULE="WN-G150UM"
 OATK="***"
+ADDRESS="192.168.1.13"
+NETMASK="255.255.255.0"
+NETWORK="192.168.1.0"
+BROADCAST="192.168.1.255"
+GATEWAY="192.168.1.1"
 
 user_set()
 {
@@ -117,20 +124,45 @@ then
 fi
 echo $PASS | sudo -S ifconfig wlan0 up
 echo $PASS | sudo -S sh -c "sudo wpa_passphrase ${SSID} ${WPA2} >>/etc/wpa_supplicant/wpa_supplicant.conf"
-echo $PASS | sudo -S sed -i -e "s/eth0/wlan0/" /etc/network/interfaces
-echo $PASS | sudo -S sed -i -e "s/dhcp/static/" /etc/network/interfaces
-echo $PASS | sudo -S sh -c 'echo "
-address 192.168.1.13
-netmask 255.255.255.0
-network 192.168.1.0
-broadcast 192.168.1.255
-gateway 192.168.1.1
+if [ ${WIRELESS_ONLY} = "true" ]
+then
+	echo $PASS | sudo -S sed -i -e "s/eth0/wlan0/" /etc/network/interfaces
+elif [ ${WIRELESS_ONLY} = "false" ]
+then
+	echo $PASS | sudo -S sh -c 'echo "
+allow-hotplug wlan0" >>/etc/network/interfaces'
+fi
+if [ ${WIRELESS_IP} = "static" ]
+then
+	if [ ${WIRELESS_ONLY} = "true" ]
+	then
+		echo $PASS | sudo -S sed -i -e "s/dhcp/static/" /etc/network/interfaces
+	elif [ ${WIRELESS_ONLY} = "false" ]
+	then
+		echo $PASS | sudo -S sh -c 'echo "
+iface wlan0 inet dhcp" >>/etc/network/interfaces'
+	fi
+	echo "#!/bin/bash
+
+echo $PASS | sudo -S sh -c 'echo \"
+address ${ADDRESS}
+netmask ${NETMASK}
+network ${NETWORK}
+broadcast ${BROADCAST}
+gateway ${GATEWAY}
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf\" >>/etc/network/interfaces'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+	. /home/${USER}/.rpi2_u14_setup_sub.sh
+	rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
+	echo "#!/bin/bash
+
+echo $PASS | sudo -S sh -c 'echo \"nameserver ${GATEWAY}\" >>/etc/resolvconf/resolv.conf.d/base'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+	. /home/${USER}/.rpi2_u14_setup_sub.sh
+	rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
+elif [ ${WIRELESS_IP} = "static" ]
+then
+	echo $PASS | sudo -S sh -c 'echo "
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
-echo $PASS | sudo -S sh -c 'echo "nameserver 192.168.1.1" >>/etc/resolvconf/resolv.conf.d/base'
-#echo $PASS | sudo -S sh -c 'echo "
-#allow-hotplug wlan0
-#iface wlan0 inet dhcp
-#wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
+fi
 cd ~
 }
 

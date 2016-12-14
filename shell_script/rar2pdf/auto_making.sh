@@ -77,6 +77,7 @@ then
 fi
 echo " "
 RAR=(`ls | grep -i .rar`)
+echo "0" > ~/rar2pdf/wait.txt
 for arg in ${RAR[@]}
 do
 	. make_pdf.sh ${arg%.*} ${arg} ${WNUM} & > /dev/null
@@ -122,4 +123,5 @@ then
 	cd ~/rar2pdf
 fi
 echo " "
+rm  -rf ~/rar2pdf/wait.txt
 set -m
