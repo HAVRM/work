@@ -2,6 +2,11 @@
 
 PASS="***"
 
+ttt()
+{
+echo "ttt"
+}
+
 #echo $PASS | sudo -S useradd -m tester
 #echo "move to tester"
 #echo $PASS | sudo -S passwd tester <<\__EOF__
@@ -52,6 +57,6 @@ PASS="***"
 #echo ${PASS} | sudo -S useradd -m tester
 #echo ${PASS} | sudo -S userdel -r tester
 
-nano tesnano <<\__EOF__
-asdf
-__EOF__
+#nano tesnano <<\__EOF__
+#asdf
+#__EOF__
