@@ -29,7 +29,7 @@ fi
 WNUM=0
 . rar_make.sh
 echo " "
-EPUB=(`ls | grep -i .epub`)
+EPUB=(`ls | grep -i -e .epub -e .mobi`)
 for arg in ${EPUB[@]}
 do
 	. epub_pdf.sh ${arg%.*} ${arg} ${WNUM} & > /dev/null
@@ -48,10 +48,12 @@ do
 			do
 				arg2=${arg%.*}
 				arg3="${arg2}.epub"
+				arg4="${arg2}.mobi"
 				arg2="${arg2}.rar"
 				mv ${arg} ${LOCA}${arg}
 				mv ~/rar2pdf/done_file/${arg2} ${LOCA}done_file/${arg2} 2> /dev/null
 				mv ~/rar2pdf/done_file/${arg3} ${LOCA}done_file/${arg3} 2> /dev/null
+				mv ~/rar2pdf/done_file/${arg4} ${LOCA}done_file/${arg4} 2> /dev/null
 			done
 			cd ~/rar2pdf
 		fi

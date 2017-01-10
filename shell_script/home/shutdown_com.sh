@@ -18,8 +18,5 @@ rm -rf sd_res.txt
 cd rpi2_u14_work
 . sub_git.sh >>/home/***/sd_res.txt 2>&1
 cd ~/AVR_mbed
-git add -A >>/home/***/sd_res.txt 2>&1
-DATA=`date '+%m%d_%H%M_%S'`
-git commit -m "${DATA}" >>/home/***/sd_res.txt 2>&1
-git push AVR_mbed master >>/home/***/sd_res.txt 2>&1
+. git_cont.sh all_push >>/home/***/sd_res.txt 2>&1
 cd $PLACEshutdown_com

@@ -74,7 +74,7 @@ then
 		NUM=`expr ${NUM} + 1`
 		rm -f ${arg} ${arg%.*}.png
 	done
-	echo -e "\r${FT}[#####   ]待機_\c"
+	echo -e "\r${FT}[#####   ]待機-\c"
 	WAIT=`cat ~/rar2pdf/wait.txt`
 	while [ ${WAIT} != "0" ]
 	do
