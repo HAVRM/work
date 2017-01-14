@@ -265,7 +265,7 @@ other_install()
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git calibre
+echo $PASS | sudo -S apt-get -y install recordmydesktop imagemagick rar unrar pdftk screen git calibre nkf
 echo $PASS | sudo -S add-apt-repository ppa:mc3man/trusty-media <<\__EOF__
 
 __EOF__
