@@ -37,4 +37,5 @@ fi
 #write progrum
 
 cd \$PLACE${NAME%.*}" >> ${NAME}
+gedit ${NAME} &
 cd $PLAcE

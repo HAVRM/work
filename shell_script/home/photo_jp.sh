@@ -6,9 +6,10 @@ then
 	if [ $1 = "-h" ]
 	then
 		echo "入力された文字列の画像を返す"
-		echo ". photo_jp.sh (+ or -)(文字) ((名前)) (((文字色))) (((背景色))) (((設定)))"
+		echo ". photo_jp.sh (+/-/h)(文字) ((名前)) (((文字色))) (((背景色))) (((設定)))"
 		echo "               +:横書き"
 		echo "               -:縦書"
+		echo "               h:1マスに圧縮(半角のみ)"
 		echo ""
 		echo -e "      色:0->\033[0;47;30m　　黒　　\033[0;39m"
 		echo -e "         1->\033[0;47;31m　　赤　　\033[0;39m"
@@ -26,7 +27,13 @@ then
 		echo -e "         5->\033[5;39m　 点滅 　\033[0;39m"
 		echo -e "         7->\033[7;39m　色反転　\033[0;39m <-default"
 		echo -e "         8->\033[8;39m\033[0;39m　(隠す)　"
-#		return 0
+		echo ""
+		echo "do you want to make photo \"h\" ? (y/n)"
+		read MAKEFILE
+		if [ ${MAKEFILE} != "y" ]
+		then
+			return 0
+		fi
 	fi
 fi
 if [ $# = 1 ]
@@ -64,12 +71,14 @@ fi
 
 STR=(`echo ${CHAR} | while read -N 1 i;do echo ${i};done`)
 FIL=0
-for arg in ${STR[@]}
-do
-	CCODE=`echo ${arg} | nkf -g`
-	if [ ${CCODE} = "ASCII" ]
-	then
-		echo "#!/bin/bash
+if [ ${DIR} = "+" -o ${DIR} = "-" ]
+then
+	for arg in ${STR[@]}
+	do
+		CCODE=`echo ${arg} | nkf -g`
+		if [ ${CCODE} = "ASCII" ]
+		then
+			echo "#!/bin/bash
 
 echo -e \"\033[${CON};4${BC};3${CC}m ${arg} \033[0;39m\"
 I=0
@@ -79,8 +88,8 @@ do
 done
 import -window root -crop 18x18+71+53 \"${NAME}_sub.jpg\"
 ">.photo_jp_sub.sh
-	else
-		echo "#!/bin/bash
+		else
+			echo "#!/bin/bash
 
 echo -e \"\033[${CON};4${BC};3${CC}m${arg} \033[0;39m\"
 I=0
@@ -90,18 +99,65 @@ do
 done
 import -window root -crop 18x18+66+53 \"${NAME}_sub.jpg\"
 ">.photo_jp_sub.sh
-	fi
-	gnome-terminal --geometry=2x3+0+0 -e 'bash -c ". .photo_jp_sub.sh"'
-	sleep 1s
-	if [ $FIL = 0 ]
-	then
+		fi
+		gnome-terminal --geometry=2x3+0+0 -e 'bash -c ". .photo_jp_sub.sh"'
 		sleep 1s
-		cp ${NAME}_sub.jpg ${NAME}
-		FIL=1
-	else
-		convert ${DIR}append ${NAME} ${NAME}_sub.jpg ${NAME}
-	fi
+		if [ $FIL = 0 ]
+		then
+			sleep 1s
+			cp ${NAME}_sub.jpg ${NAME}
+			FIL=1
+		else
+			convert ${DIR}append ${NAME} ${NAME}_sub.jpg ${NAME}
+		fi
+	done
+elif [ ${DIR} = "h" ]
+then
+	for arg in ${STR[@]}
+	do
+		CCODE=`echo ${arg} | nkf -g`
+		if [ ${CCODE} = "ASCII" ]
+		then
+			echo "#!/bin/bash
+
+echo -e \"\033[${CON};4${BC};3${CC}m${arg}\033[0;39m\"
+I=0
+while [ \$I -ne 50 ]
+do
+	I=\`expr \$I + 1\`
 done
-rm .photo_jp_sub.sh ${NAME}_sub.jpg
+import -window root -crop 9x18+66+53 \"${NAME}_sub.jpg\"
+">.photo_jp_sub.sh
+		else
+			echo "this option is only for ASCII"
+			echo "#!/bin/bash
+
+echo -e \"\033[${CON};4${BC};3${CC}m \033[0;39m\"
+I=0
+while [ \$I -ne 50 ]
+do
+	I=\`expr \$I + 1\`
+done
+import -window root -crop 9x18+66+53 \"${NAME}_sub.jpg\"
+">.photo_jp_sub.sh
+		fi
+		gnome-terminal --geometry=2x3+0+0 -e 'bash -c ". .photo_jp_sub.sh"'
+		sleep 1s
+		if [ $FIL = 0 ]
+		then
+			sleep 1s
+			cp ${NAME}_sub.jpg ${NAME}
+			FIL=1
+		else
+			convert +append ${NAME} ${NAME}_sub.jpg ${NAME}
+		fi
+	done
+	convert -scale 18x18! ${NAME} ${NAME}
+else
+	echo "please write option +,-,h"
+	cd $PLACEphoto_jp
+	return 0
+fi
+rm .photo_jp_sub.sh ${NAME}_sub.jpg >/dev/null 2>&1
 echo ${PLACEphoto_jp}/${NAME}
 cd $PLACEphoto_jp
