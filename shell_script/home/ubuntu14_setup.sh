@@ -14,6 +14,7 @@ GITNAME="HAVRM" #github username
 GITMAIL="***@gmail.com" #github mail address
 GITPASS="***" #github password
 VNCPASS="***" #tigerVNC password
+USEFABMAP="yes" #use openFABMAP for large loop closure detection at lsd_slam "yes",not "no"
 
 update_upgrade()
 {
@@ -119,6 +120,32 @@ source ~/.bashrc
 catkin_make
 echo $PASS | sudo -S apt-get -y install ros-indigo-camera-umd
 cd ~/catkin_ws/src
+cd ~
+}
+
+lsd_slam()
+{
+echo "---lsd_slam---"
+cd ~
+update_upgrade
+echo $PASS | sudo -S apt-get -y install python-rosinstall ros-indigo-libg2o ros-indigo-cv-bridge liblapack-dev libblas-dev freeglut3-dev libqglviewer-dev libsuitesparse-dev libx11-dev
+mkdir ~/rosbuild_ws
+cd ~/rosbuild_ws
+rosws init . /opt/ros/indigo
+mkdir package_dir
+rosws set -y ~/rosbuild_ws/package_dir -t .
+echo "source ~/rosbuild_ws/setup.bash" >> ~/.bashrc
+bash
+cd package_dir
+git clone https://github.com/tum-vision/lsd_slam.git lsd_slam
+rosmake lsd_slam
+if [ $USEFABMAP = "yes" ]
+then
+	sed -i -e "s/#add_subdirectory/add_subdirectory/" ~/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/CMakeLists.txt
+	sed -i -e "s/#include_directories/include_directories/" ~/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/CMakeLists.txt
+	sed -i -e "s/#add_definitions/add_definitions/" ~/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/CMakeLists.txt
+	sed -i -e "s/#set/set/" ~/rosbuild_ws/package_dir/lsd_slam/lsd_slam_core/CMakeLists.txt
+fi
 cd ~
 }
 

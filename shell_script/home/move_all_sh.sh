@@ -66,6 +66,9 @@ do
 	elif [ `echo ${arg} | grep -i "pepper_ws"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "rosbuild_ws"` ]
+	then
+		:
 	elif [ `echo ${arg} | grep -i "gcc4mbed"` ]
 	then
 		:
