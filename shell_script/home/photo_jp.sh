@@ -6,10 +6,11 @@ then
 	if [ $1 = "-h" ]
 	then
 		echo "入力された文字列の画像を返す"
-		echo ". photo_jp.sh (+/-/h)(文字) ((名前)) (((文字色))) (((背景色))) (((設定)))"
+		echo ". photo_jp.sh (+/-/1/h)(文字) ((名前)) (((文字色))) (((背景色))) (((設定)))"
 		echo "               +:横書き"
 		echo "               -:縦書"
-		echo "               h:1マスに圧縮(半角のみ)"
+		echo "               1:1マスに圧縮(半角のみ)"
+		echo "               h:半角横書き(半角のみ)"
 		echo ""
 		echo -e "      色:0->\033[0;47;30m　　黒　　\033[0;39m"
 		echo -e "         1->\033[0;47;31m　　赤　　\033[0;39m"
@@ -18,8 +19,7 @@ then
 		echo -e "         4->\033[0;47;34m　　青　　\033[0;39m"
 		echo -e "         5->\033[0;47;35m マゼンダ \033[0;39m"
 		echo -e "         6->\033[0;47;36m　シアン　\033[0;39m"
-		echo -e "         7->\033[0;40;37m　　白　　\033[0;39m"
-		echo -e "         7->\033[0;49;39m　初期値　\033[0;39m"
+		echo -e "         7->\033[0;40;37m　　白　　\033[0;39m <-default"
 		echo ""
 		echo -e "    設定:0->\033[0;39m ノーマル \033[0;39m"
 		echo -e "         1->\033[1;39m　 太字 　\033[0;39m"
@@ -111,7 +111,7 @@ import -window root -crop 18x18+66+53 \"${NAME}_sub.jpg\"
 			convert ${DIR}append ${NAME} ${NAME}_sub.jpg ${NAME}
 		fi
 	done
-elif [ ${DIR} = "h" ]
+elif [ ${DIR} = "1" ]
 then
 	for arg in ${STR[@]}
 	do
@@ -153,6 +153,37 @@ import -window root -crop 9x18+66+53 \"${NAME}_sub.jpg\"
 		fi
 	done
 	convert -scale 18x18! ${NAME} ${NAME}
+elif [ ${DIR} = "h" ]
+then
+	for arg in ${STR[@]}
+	do
+		CCODE=`echo ${arg} | nkf -g`
+		if [ ${CCODE} = "ASCII" ]
+		then
+			echo "#!/bin/bash
+
+echo -e \"\033[${CON};4${BC};3${CC}m${arg} \033[0;39m\"
+I=0
+while [ \$I -ne 50 ]
+do
+	I=\`expr \$I + 1\`
+done
+import -window root -crop 9x18+66+53 \"${NAME}_sub.jpg\"
+">.photo_jp_sub.sh
+		else
+			echo "半角英数字を入れてください"
+		fi
+		gnome-terminal --geometry=2x3+0+0 -e 'bash -c ". .photo_jp_sub.sh"'
+		sleep 1s
+		if [ $FIL = 0 ]
+		then
+			sleep 1s
+			cp ${NAME}_sub.jpg ${NAME}
+			FIL=1
+		else
+			convert +append ${NAME} ${NAME}_sub.jpg ${NAME}
+		fi
+	done
 else
 	echo "please write option +,-,h"
 	cd $PLACEphoto_jp
