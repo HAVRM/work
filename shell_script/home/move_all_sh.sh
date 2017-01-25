@@ -63,7 +63,13 @@ do
 	elif [ `echo ${arg} | grep -i "robocon"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "nhk"` ]
+	then
+		:
 	elif [ `echo ${arg} | grep -i "pepper_ws"` ]
+	then
+		:
+	elif [ `echo ${arg} | grep -i "naoqi"` ]
 	then
 		:
 	elif [ `echo ${arg} | grep -i "rosbuild_ws"` ]
