@@ -12,7 +12,7 @@ WIRELESS_ONLY="true" #"true" or "false", if "true" then you CANNOT use ethernet
 WIRELESS_IP="static" #"static" or "dhcp"
 WIFIMODULE="WN-G150UM"
 OATK="***"
-ADDRESS="192.168.1.13"
+ADDRESS="192.168.1.150"
 NETMASK="255.255.255.0"
 NETWORK="192.168.1.0"
 BROADCAST="192.168.1.255"
@@ -317,7 +317,7 @@ update_upgrade
 base_install
 wireless_setup
 japanese_setup
-#desktop_install
+desktop_install
 web_server_install
 #file_server_install
 other_install

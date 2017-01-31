@@ -83,8 +83,8 @@ echo "---open_cv_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install build-essential libgtk2.0-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev cmake python-dev python-numpy python-tk libtbb-dev libeigen3-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev libqt4-dev libqt4-opengl-dev sphinx-common texlive-latex-extra libv4l-dev libdc1394-22-dev libavcodec-dev libavformat-dev libswscale-dev default-jdk ant libvtk5-qt4-dev
-mkdir ~/opencv_dir
-cd ~/opencv_dir
+mkdir ~/.opencv_dir
+cd ~/.opencv_dir
 wget http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/2.4.9/opencv-2.4.9.zip
 unzip opencv-2.4.9.zip
 cd opencv-2.4.9
@@ -97,7 +97,7 @@ sudo echo "/usr/local/lib"| sudo tee -a /etc/ld.so.conf.d/opencv.conf
 echo $PASS | sudo -S ldconfig
 sudo echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
 export PKG_CONFIG_PATH"| sudo tee -a /etc/bash.bashrc
-cd ~/opencv_dir/opencv-2.4.9/samples/c
+cd ~/.opencv_dir/opencv-2.4.9/samples/c
 chmod +x build_all.sh
 ./build_all.sh
 ./facedetect --cascade="/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml" --scale=1.5 lena.jpg &
@@ -297,8 +297,8 @@ torch_install()
 echo "---torch_install---"
 cd ~
 update_upgrade
-git clone https://github.com/torch/distro.git ~/torch --recursive
-cd ~/torch
+git clone https://github.com/torch/distro.git ~/.torch --recursive
+cd ~/.torch
 echo $PASS | sudo -S bash install-deps
 ./install.sh <<\__EOF__
 yes
