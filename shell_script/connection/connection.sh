@@ -5,7 +5,7 @@ if [ $# != 0 ]
 then
 	if [ $1 = "-h" ]
 	then
-		echo "複数の動画ファイルをls順に1つにまとめる"
+		echo "複数の動画ファイルをls順に1つにまとめる。最後の\"_\"以前が同じものを結合する"
 		echo ". connection.sh (.形式) ((場所))"
 		return 0
 	fi
@@ -33,7 +33,7 @@ then
 			do
 				echo "file '${PLC}/${arg3}'" >> input.txt
 			done
-			ffmpeg -f concat -safe 0 -i input.txt -c copy done_file/${arg2}.flv | tr '\n' '\r'
+			ffmpeg -threads 8 -f concat -safe 0 -i input.txt -c copy done_file/${arg2}${1} | tr '\n' '\r'
 			for arg3 in ${CON[@]}
 			do
 				mv ${arg3} done_file/${arg3}
