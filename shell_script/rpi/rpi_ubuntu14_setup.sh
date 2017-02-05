@@ -217,6 +217,10 @@ echo "---web_server_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install apache2
+echo ${PASS} | sudo -S sed -i -e "s/Options Indexes FollowSymLinks/Options Indexes FollowSymLinks ExecCGI\r\tAddHandler cgi-script .cgi/g" /etc/apache2/apache2.conf
+cd /etc/apache2/mods-enabled
+echo ${PASS} | sudo -S ln -s ../mods-available/cgi.load .
+echo ${PASS} | sudo -S /usr/sbin/apachectl restart
 cd ~
 }
 

@@ -63,3 +63,5 @@ PASS="***"
 #gnome-terminal --geometry=100x10+0+0 -e 'bash echo "test"'
 #import -window root -negate -crop 18x18+66+53 "test.jpg"
 #echo "a" | nkf -g
+#sed -i -e "s/\*\*\*/bbb/g" test.txt
+#echo ${PASS} | sudo -S ln -s ~/work ~/test
