@@ -87,6 +87,15 @@ do
 	elif [ `echo ${arg} | grep -i "rpi2_u14_work"` ]
 	then
 		:
+	elif [ `echo ${arg} | grep -i "open_jtalk"` ]
+	then
+		:
+	elif [ `echo ${arg} | grep -i "sketchbook"` ]
+	then
+		:
+	elif [ `echo ${arg} | grep -i "robocon"` ]
+	then
+		:
 	else
 		arg2=${arg#*/}
 		if [ ${arg2} = ${arg2%/*} ]
