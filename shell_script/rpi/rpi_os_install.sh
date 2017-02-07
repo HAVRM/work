@@ -6,7 +6,7 @@ then
 	if [ $1 = "-h" ]
 	then
 		echo "raspberry2のosをインストールするプログラム.母艦で実行"
-		echo ". rpi2_os_install.sh (焼付け場所:/dev/sdd) (os名:ubuntu14,ubuntu16,raspbian,noobs)"
+		echo ". rpi_os_install.sh (焼付け場所:/dev/sdd) (os名:ubuntu14,2-ubuntu16,3-ubuntu16,raspbian,noobs)"
 		return 0
 	fi
 fi
@@ -30,8 +30,6 @@ else
 		return 0
 	fi
 fi
-echo $PASS | sudo -S apt-get update | tr '\n' '\r'
-echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 echo $PASS | sudo -S apt-get update | tr '\n' '\r'
 echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 umount ${PMP}
@@ -114,7 +112,7 @@ autologin-user-timeout=0" >>~/usb/etc/lightdm/lightdm.conf'
 		echo $PASS | sudo -S umount ${PMP2}
 		rmdir ~/usb
 	fi
-elif [ $2 = "ubuntu16" ]
+elif [ $2 = "2-ubuntu16" ]
 then
 	DATA=(`ls *rpi2-ubuntu16.img`)
 	if [ ! `echo $DATA | grep 'rpi2-ubuntu16.img'` ]
@@ -129,6 +127,50 @@ then
 	fi
 	echo $PASS | sudo -S dd bs=4M if=${DATA} of=${1}
 	sync
+elif [ $2 = "3-ubuntu16" ]
+then
+	DATA=(`ls *rpi3-ubuntu16.img`)
+	if [ ! `echo $DATA | grep 'rpi3-ubuntu16.img'` ]
+	then
+		DATA=(`ls *rpi3-ubuntu16.img.xz`)
+		if [ ! `echo $DATA | grep 'rpi3-ubuntu16.img.xz'` ]
+		then
+			wget -O rpi3-ubuntu16.img.xz http://www.finnie.org/software/raspberrypi/ubuntu-rpi3/ubuntu-16.04-preinstalled-server-armhf+raspi3.img.xz
+		fi
+		xz -dvk rpi3-ubuntu16.img.xz
+		DATA=(`ls *rpi3-ubuntu16.img`)
+	fi
+	echo $PASS | sudo -S dd bs=4M if=${DATA} of=${1}
+	sync
+	PSSTA=(`echo ${PASS} | sudo -S fdisk -l ${1}`)
+	POINT=0
+	for arg in ${PSSTA[@]}
+	do
+		if [ ${POINT} = 1 ]
+		then
+			break
+		elif [ ${arg} = "${PMP2}" ]
+		then
+			POINT=1
+		fi
+	done
+	echo "#!/bin/bash
+
+echo $PASS | sudo -S fdisk ${1} <<\__EOF__
+d
+2
+n
+p
+2
+${arg}
+
+w
+__EOF__" >.rpi_os_install_sub.sh
+	. .rpi_os_install_sub.sh
+	rm -f .rpi_os_install_sub.sh
+	sudo e2fsck -f ${PMP2}
+	#do not use 'echo $PASS | sudo -S' when e2fsck
+	echo $PASS | sudo -S resize2fs ${PMP2}
 elif [ $2 = "raspbian" ]
 then
 	DATA=(`ls *raspbian-jessie.img`)

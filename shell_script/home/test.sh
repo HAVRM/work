@@ -65,3 +65,26 @@ PASS="***"
 #echo "a" | nkf -g
 #sed -i -e "s/\*\*\*/bbb/g" test.txt
 #echo ${PASS} | sudo -S ln -s ~/work ~/test
+#DATA=(`echo ${PASS} | sudo -S fdisk -l /dev/sdd`)
+#GET=0
+#for arg in ${DATA[@]}
+#do
+#	if [ ${GET} = 1 ]
+#	then
+#		break
+#	elif [ ${arg} = "/dev/sdd2" ]
+#	then
+#		GET=1
+#	fi
+#done
+#echo ${arg}
+echo "echo $PASS | sudo -S fdisk  <<\__EOF__
+d
+2
+n
+p
+2
+
+
+w
+__EOF__"
