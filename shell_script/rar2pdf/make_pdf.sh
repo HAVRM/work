@@ -11,6 +11,8 @@ then
 fi
 NAME=$1
 RAR=$2
+THR=$3
+THR=`expr ${THR} + 1`
 NUM=0
 FT=""
 if [ $# = 3 ]
@@ -75,21 +77,25 @@ then
 		rm -f ${arg} ${arg%.*}.png
 	done
 	echo -e "\r${FT}[#####   ]待機-\c"
+	sleep ${THR}s
 	WAIT=`cat ~/rar2pdf/wait.txt`
 	while [ ${WAIT} != "0" ]
 	do
-		sleep 2s
+		sleep 1s
+		sleep ${THR}s
 		WAIT=`cat ~/rar2pdf/wait.txt`
 	done
-	echo "1" > ~/rar2pdf/wait.txt
+	echo "${THR}" > ~/rar2pdf/wait.txt
 	echo -e "\r${FT}[#####   ]待機 \c"
 	MEM=`. ~/rar2pdf/mem_check.sh`
-	sleep 2s
+	sleep 1s
+	sleep ${THR}s
 	MEM2=`. ~/rar2pdf/mem_check.sh`
-	while [ ${MEM} -eq ${MEM2} -a ${MEM2} -lt 50 ]
+	while [ ${MEM} -ne ${MEM2} -o ${MEM2} -lt 50 ]
 	do
 		MEM=`. ~/rar2pdf/mem_check.sh`
-		sleep 2s
+		sleep 1s
+		sleep ${THR}s
 		MEM2=`. ~/rar2pdf/mem_check.sh`
 	done
 	echo -e "\r${FT}[######  ]変換\c"
