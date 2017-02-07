@@ -12,6 +12,7 @@ then
 fi
 DATA=`date '+%m%d_%H%M_%S'`
 . move_all_sh.sh *** *** *** *** *** *** *** ***
+. move_all_cpp.sh *** *** *** *** *** *** *** ***
 cd ~/work
 git add -A
 git commit -m "${DATA}"
