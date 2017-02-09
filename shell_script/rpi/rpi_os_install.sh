@@ -171,6 +171,21 @@ __EOF__" >.rpi_os_install_sub.sh
 	sudo e2fsck -f ${PMP2}
 	#do not use 'echo $PASS | sudo -S' when e2fsck
 	echo $PASS | sudo -S resize2fs ${PMP2}
+	if [ `ls rpi3_ubuntu16_setup.sh` ]
+	#if [ "0" = "1" ]
+	then
+		mkdir ~/usb
+		echo $PASS | sudo -S mount ${PMP2} ~/usb
+		echo $PASS | sudo -S mkdir -p ~/usb/home/ubuntu/rpi
+		echo $PASS | sudo -S cp rpi3_ubuntu16_setup.sh ~/usb/home/ubuntu/rpi3_ubuntu16_setup.sh
+		echo $PASS | sudo -S chmod a+x ~/usb/home/ubuntu/rpi3_ubuntu16_setup.sh
+		echo $PASS | sudo -S chmod a+w ~/usb/home/ubuntu/rpi/
+		cp ${PLACErpi2_os_install}/*.sh ~/usb/home/ubuntu/rpi/
+		echo $PASS | sudo -S sed -i -e "s/exit\ 0/.\ \/home\/ubuntu\/rpi3_ubuntu16_setup.sh\nexit\ 0/" /etc/rc.local
+		#echo $PASS | sudo -S sh -c 'echo "setterm -blank 0" >>~/usb/home/ubuntu/.bashrc'
+		echo $PASS | sudo -S umount ${PMP2}
+		rmdir ~/usb
+	fi
 elif [ $2 = "raspbian" ]
 then
 	DATA=(`ls *raspbian-jessie.img`)

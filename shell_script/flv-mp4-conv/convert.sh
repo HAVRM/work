@@ -18,12 +18,12 @@ fi
 mkdir mp4 >/dev/null 2>&1
 mkdir done_file >/dev/null 2>&1
 SIZE=(`resize`)
-resize -s 24 105 1>/dev/null 2>&1
+resize -s 24 115 1>/dev/null 2>&1
 FLV=(`ls | grep -i -e .flv`)
 for arg in ${FLV[@]}
 do
 	echo ${arg%.*}
-	ffmpeg -threads 8 -i ${arg} -acodec copy -vcodec copy -y ${arg%.*}.mp4
+	ffmpeg -threads 8 -i ${arg} -vsync 1 -acodec copy -vcodec libx264 -y ${arg%.*}.mp4
 	mv ${arg} done_file/${arg}
 	mv ${arg%.*}.mp4 mp4/${arg%.*}.mp4
 done
