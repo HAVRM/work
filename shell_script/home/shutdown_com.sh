@@ -16,7 +16,7 @@ trash-empty
 rm -rf sd_res.txt
 . github_ctrl.sh 1>/home/***/sd_res.txt 2>&1
 cd rpi2_u14_work
-. sub_git.sh pull>>/home/***/sd_res.txt 2>&1
+. sub_git.sh push>>/home/***/sd_res.txt 2>&1
 cd ~/AVR_mbed
 . git_cont.sh all_push >>/home/***/sd_res.txt 2>&1
 #cd ~/pepper_ws/src
