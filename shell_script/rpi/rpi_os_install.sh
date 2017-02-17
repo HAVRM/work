@@ -6,7 +6,7 @@ then
 	if [ $1 = "-h" ]
 	then
 		echo "raspberry2のosをインストールするプログラム.母艦で実行"
-		echo ". rpi_os_install.sh (焼付け場所:/dev/sdd) (os名:ubuntu14,2-ubuntu16,3-ubuntu16,raspbian,noobs)"
+		echo ". rpi_os_install.sh (焼付け場所:/dev/sdd) (os名:ubuntu14,2-ubuntu16,3-ubuntu16,mate16,raspbian,noobs)"
 		return 0
 	fi
 fi
@@ -32,6 +32,7 @@ else
 fi
 echo $PASS | sudo -S apt-get update | tr '\n' '\r'
 echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
+echo $PASS | sudo -S apt-get -y install bmap-tools gddrescue xz-utils
 umount ${PMP}
 umount ${PMP2}
 sleep 5s
@@ -68,7 +69,6 @@ then
 	rmdir usb
 elif [ $2 = "ubuntu14" ]
 then
-	echo $PASS | sudo -S apt-get -y install bmap-tools gddrescue
 	DATA=(`ls *ubuntu-trusty.img`)
 	if [ ! `echo $DATA | grep 'ubuntu-trusty.img'` ]
 	then
@@ -186,6 +186,34 @@ __EOF__" >.rpi_os_install_sub.sh
 		echo $PASS | sudo -S umount ${PMP2}
 		rmdir ~/usb
 	fi
+elif [ $2 = "mate16" ]
+then
+	DATA=(`ls *rpi-ubuntumate16.img`)
+	if [ ! `echo $DATA | grep 'rpi-ubuntumate16.img'` ]
+	then
+		DATA=(`ls *rpi-ubuntumate16.img.xz`)
+		if [ ! `echo $DATA | grep 'rpi-ubuntumate16.img.xz'` ]
+		then
+			wget -O rpi-ubuntumate16.img.xz https://ubuntu-mate.org/raspberry-pi/ubuntu-mate-16.04.2-desktop-armhf-raspberry-pi.img.xz
+		fi
+		unxz rpi-ubuntumate16.img.xz
+		DATA=(`ls *rpi-ubuntumate16.img`)
+	fi
+	echo $PASS | sudo -S ddrescue -D --force ${DATA} ${1}
+	sync
+	echo $PASS | sudo -S fdisk ${1} <<\__EOF__
+d
+2
+n
+p
+2
+	
+
+w
+__EOF__
+	sudo e2fsck -f ${PMP2}
+	#do not use 'echo $PASS | sudo -S' when e2fsck
+	echo $PASS | sudo -S resize2fs ${PMP2}
 elif [ $2 = "raspbian" ]
 then
 	DATA=(`ls *raspbian-jessie.img`)
