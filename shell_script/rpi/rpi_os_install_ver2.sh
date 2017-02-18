@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PASS="***"
 PLACErpi2_os_install=`pwd`
 if [ $# != 0 ]
 then
