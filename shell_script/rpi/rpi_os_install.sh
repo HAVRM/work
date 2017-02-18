@@ -199,7 +199,8 @@ then
 		unxz rpi-ubuntumate16.img.xz
 		DATA=(`ls *rpi-ubuntumate16.img`)
 	fi
-	echo $PASS | sudo -S ddrescue -D --force ${DATA} ${1}
+#	echo $PASS | sudo -S ddrescue -D --force ${DATA} ${1}
+	echo $PASS | sudo -S dd bs=4M if=${DATA} of=${1}
 	sync
 	echo $PASS | sudo -S fdisk ${1} <<\__EOF__
 d
