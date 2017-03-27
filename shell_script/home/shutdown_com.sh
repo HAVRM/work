@@ -14,6 +14,12 @@ fi
 cd /home/***
 trash-empty
 rm -rf sd_res.txt
+ping 8.8.8.8 -c 5 | grep -q "icmp_seq=1"
+if [ $? = 1 ]
+then
+	echo "this machine is not in the internet" 1>/home/***/sd_res.txt 2>&1
+	return 0
+fi
 . github_ctrl.sh 1>/home/***/sd_res.txt 2>&1
 cd rpi2_u14_work
 . sub_git.sh push>>/home/***/sd_res.txt 2>&1
