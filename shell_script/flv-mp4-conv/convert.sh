@@ -23,7 +23,7 @@ FLV=(`ls | grep -i -e .flv`)
 for arg in ${FLV[@]}
 do
 	echo ${arg%.*}
-	ffmpeg -threads 8 -i ${arg} -vsync 1 -acodec copy -vcodec libx264 -y ${arg%.*}.mp4
+	ffmpeg -threads 15 -i ${arg} -acodec copy -vcodec copy -y ${arg%.*}.mp4
 	mv ${arg} done_file/${arg}
 	mv ${arg%.*}.mp4 mp4/${arg%.*}.mp4
 done
