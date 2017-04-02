@@ -53,7 +53,7 @@ then
 		MEM=`. ~/rar2pdf/mem_check.sh`
 	done
 	echo -e "\r${FT}06変換\c"
-	PHT=(`ls | grep -i .epub`)
+	PHT=(`ls | grep -i -e .epub -e .mobi`)
 	ebook-convert ${PHT} ${NAME}.pdf > /dev/null
 	echo -e "\r${FT}08整理\c"
 	cd ..

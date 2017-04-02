@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PASS="***"
-
+testPLACE=`pwd`
 #ttt()
 #{
 #echo "ttt"
@@ -78,13 +78,21 @@ PASS="***"
 #	fi
 #done
 #echo ${arg}
-echo "echo $PASS | sudo -S fdisk  <<\__EOF__
-d
-2
-n
-p
-2
+#echo "echo $PASS | sudo -S fdisk  <<\__EOF__
+#d
+#2
+#n
+#p
+#2
 
 
-w
-__EOF__"
+#w
+#__EOF__"
+
+cd ${1}
+FILE=(`ls`)
+for arg in ${FILE[@]}
+do
+	mv ${arg} ${arg%.*}_.pdf
+done
+cd $testPLACE
