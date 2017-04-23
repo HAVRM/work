@@ -7,9 +7,16 @@ GITMAIL="***@gmail.com"
 GITPASS="***"
 SSID="***"
 WPA2="***"
-DSKP="gnome" #"gnome","lubuntu","xubuntu","kubuntu"
+DSKP="gnome" #"gnome","lubuntu","xubuntu","kubuntu" can be select
+WIRELESS_ONLY="true" #"true" or "false", if "true" then you CANNOT use ethernet
+WIRELESS_IP="static" #"static" or "dhcp"
 WIFIMODULE="WN-G150UM"
 OATK="***"
+ADDRESS="192.168.3.150"
+NETMASK="255.255.255.0"
+NETWORK="192.168.3.0"
+BROADCAST="192.168.3.255"
+GATEWAY="192.168.3.1"
 
 user_set()
 {
@@ -90,9 +97,9 @@ fi
 update_upgrade()
 {
 echo "---update_upgrade---"
-echo $PASS | sudo -S apt-get update
+echo $PASS | sudo -S apt-get update | tr '\n' '\r'
 echo ""
-echo $PASS | sudo -S apt-get -y upgrade
+echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 }
 
 base_install()
@@ -117,30 +124,55 @@ then
 fi
 echo $PASS | sudo -S ifconfig wlan0 up
 echo $PASS | sudo -S sh -c "sudo wpa_passphrase ${SSID} ${WPA2} >>/etc/wpa_supplicant/wpa_supplicant.conf"
-echo $PASS | sudo -S sed -i -e "s/eth0/wlan0/" /etc/network/interfaces
-echo $PASS | sudo -S sed -i -e "s/dhcp/static/" /etc/network/interfaces
-echo $PASS | sudo -S sh -c 'echo "
-address 192.168.3.13
-netmask 255.255.255.0
-network 192.168.3.0
-broadcast 192.168.3.255
-gateway 192.168.3.1
+if [ ${WIRELESS_ONLY} = "true" ]
+then
+	echo $PASS | sudo -S sed -i -e "s/eth0/wlan0/" /etc/network/interfaces
+elif [ ${WIRELESS_ONLY} = "false" ]
+then
+	echo $PASS | sudo -S sh -c 'echo "
+allow-hotplug wlan0" >>/etc/network/interfaces'
+fi
+if [ ${WIRELESS_IP} = "static" ]
+then
+	if [ ${WIRELESS_ONLY} = "true" ]
+	then
+		echo $PASS | sudo -S sed -i -e "s/dhcp/static/" /etc/network/interfaces
+	elif [ ${WIRELESS_ONLY} = "false" ]
+	then
+		echo $PASS | sudo -S sh -c 'echo "
+iface wlan0 inet dhcp" >>/etc/network/interfaces'
+	fi
+	echo "#!/bin/bash
+
+echo $PASS | sudo -S sh -c 'echo \"
+address ${ADDRESS}
+netmask ${NETMASK}
+network ${NETWORK}
+broadcast ${BROADCAST}
+gateway ${GATEWAY}
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf\" >>/etc/network/interfaces'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+	. /home/${USER}/.rpi2_u14_setup_sub.sh
+	rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
+	echo "#!/bin/bash
+
+echo $PASS | sudo -S sh -c 'echo \"nameserver ${GATEWAY}\" >>/etc/resolvconf/resolv.conf.d/base'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+	. /home/${USER}/.rpi2_u14_setup_sub.sh
+	rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
+elif [ ${WIRELESS_IP} = "static" ]
+then
+	echo $PASS | sudo -S sh -c 'echo "
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
-echo $PASS | sudo -S sh -c 'echo "nameserver 192.168.3.1" >>/etc/resolvconf/resolv.conf.d/base'
-#echo $PASS | sudo -S sh -c 'echo "
-#allow-hotplug wlan0
-#iface wlan0 inet dhcp
-#wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
+fi
 cd ~
 }
 
 japanese_setup()
 {
 echo "---japanese_setup---"
-cd ~
-update_upgrade
-echo $PASS | sudo -S apt-get -y install language-pack-ja manpages-ja
-echo $PASS | sudo -S update-locale LANG=ja_JP.UTF-8
+#cd ~
+#update_upgrade
+#echo $PASS | sudo -S apt-get -y install language-pack-ja manpages-ja
+#echo $PASS | sudo -S update-locale LANG=ja_JP.UTF-8
 #export LANG=ja_JP.UTF-8
 #echo "case \$TERM in
 #     linux)LANG=C ;;
@@ -185,6 +217,10 @@ echo "---web_server_install---"
 cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install apache2
+echo ${PASS} | sudo -S sed -i -e "s/Options Indexes FollowSymLinks/Options Indexes FollowSymLinks ExecCGI\r\tAddHandler cgi-script .cgi/g" /etc/apache2/apache2.conf
+cd /etc/apache2/mods-enabled
+echo ${PASS} | sudo -S ln -s ../mods-available/cgi.load .
+echo ${PASS} | sudo -S /usr/sbin/apachectl restart
 cd ~
 }
 
@@ -204,7 +240,7 @@ other_install()
 echo "---other_install---"
 cd ~
 update_upgrade
-echo $PASS | sudo -S apt-get -y install emacs24 imagemagick unrar pdftk screen git calibre expect
+echo $PASS | sudo -S apt-get -y install emacs24 imagemagick unrar pdftk screen git calibre expect curl
 cd ~
 }
 
@@ -239,16 +275,20 @@ git config --global user.email "${GITMAIL}"
 echo ${PASS} | sudo -S rm -rf /var/www/*
 echo ${PASS} | sudo -S ln -s ~/rpi2_u14_work/html /var/www/
 mkdir ~/file
+chmod a+w ~/file
 echo ${PASS} | sudo -S ln -s ~/file ~/rpi2_u14_work/html
 cp -rf auto_pdf ~/auto_pdf
 sed -i -e "s/ubuntu/${USER}/" /home/${USER}/auto_pdf/auto_get_pdf.sh
 echo $PASS | sudo -S sh -c "echo OAUTH_ACCESS_TOKEN=${OATK} >/home/${USER}/auto_pdf/.dropbox_uploader"
 echo "#!/bin/bash
 
-echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * . /home/${USER}/auto_pdf/auto_get_pdf.sh >/dev/null 2>&1
-0 1 * * * . /home/${USER}/update_upgrade.sh >/dev/null 2>&1\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
+echo $PASS | sudo -S sh -c 'echo \"0 0,6,12,18 * * * /bin/bash /home/${USER}/auto_pdf/auto_get_pdf.sh >/home/${USER}/cron_log/agp 2>&1
+0 1 * * * /bin/bash /home/${USER}/update_upgrade.sh >/home/${USER}/cron_log/uu 2>&1
+\" >>/var/spool/cron/crontabs/${USER}'" >/home/${USER}/.rpi2_u14_setup_sub.sh
 . /home/${USER}/.rpi2_u14_setup_sub.sh
 rm -rf /home/${USER}/.rpi2_u14_setup_sub.sh
+echo $PASS | sudo -s chown ${USER}:crontab /var/spool/cron/crontabs/${USER}
+mkdir ~/cron_log
 chmod a+x /home/${USER}/auto_pdf/auto_get_pdf.sh
 chmod a+x /home/${USER}/update_upgrade.sh
 cd ~
@@ -281,7 +321,7 @@ update_upgrade
 base_install
 wireless_setup
 japanese_setup
-#desktop_install
+desktop_install
 web_server_install
 #file_server_install
 other_install

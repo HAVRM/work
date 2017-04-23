@@ -90,9 +90,9 @@ fi
 update_upgrade()
 {
 echo "---update_upgrade---"
-echo $PASS | sudo -S apt-get update
+echo $PASS | sudo -S apt-get update | tr '\n' '\r'
 echo ""
-echo $PASS | sudo -S apt-get -y upgrade
+echo $PASS | sudo -S apt-get -y upgrade | tr '\n' '\r'
 }
 
 base_install()
@@ -120,13 +120,13 @@ echo $PASS | sudo -S sh -c "sudo wpa_passphrase ${SSID} ${WPA2} >>/etc/wpa_suppl
 echo $PASS | sudo -S sed -i -e "s/eth0/wlan0/" /etc/network/interfaces
 echo $PASS | sudo -S sed -i -e "s/dhcp/static/" /etc/network/interfaces
 echo $PASS | sudo -S sh -c 'echo "
-address 192.168.3.13
+address 192.168.1.13
 netmask 255.255.255.0
-network 192.168.3.0
-broadcast 192.168.3.255
-gateway 192.168.3.1
+network 192.168.1.0
+broadcast 192.168.1.255
+gateway 192.168.1.1
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf" >>/etc/network/interfaces'
-echo $PASS | sudo -S sh -c 'echo "nameserver 192.168.3.1" >>/etc/resolvconf/resolv.conf.d/base'
+echo $PASS | sudo -S sh -c 'echo "nameserver 192.168.1.1" >>/etc/resolvconf/resolv.conf.d/base'
 #echo $PASS | sudo -S sh -c 'echo "
 #allow-hotplug wlan0
 #iface wlan0 inet dhcp
@@ -141,12 +141,12 @@ cd ~
 update_upgrade
 echo $PASS | sudo -S apt-get -y install language-pack-ja manpages-ja
 echo $PASS | sudo -S update-locale LANG=ja_JP.UTF-8
-#export LANG=ja_JP.UTF-8
-#echo "case \$TERM in
-#     linux)LANG=C ;;
-#     *)LANG=ja_JP.UTF-8 ;;
-#esac" >>/home/${USER}/.bashrc
-#LANG=C
+export LANG=ja_JP.UTF-8
+echo "case \$TERM in
+     linux)LANG=C ;;
+     *)LANG=ja_JP.UTF-8 ;;
+esac" >>/home/${USER}/.bashrc
+LANG=C
 echo "Asia/Tokyo" | sudo tee /etc/timezone
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive tzdata
 echo $PASS | sudo -S sed -i -e "s/\"us\"/\"jp\"/" /etc/default/keyboard
