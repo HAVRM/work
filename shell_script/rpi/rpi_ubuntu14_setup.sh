@@ -12,11 +12,11 @@ WIRELESS_ONLY="true" #"true" or "false", if "true" then you CANNOT use ethernet
 WIRELESS_IP="static" #"static" or "dhcp"
 WIFIMODULE="WN-G150UM"
 OATK="***"
-ADDRESS="192.168.1.150"
+ADDRESS="192.168.3.150"
 NETMASK="255.255.255.0"
-NETWORK="192.168.1.0"
-BROADCAST="192.168.1.255"
-GATEWAY="192.168.1.1"
+NETWORK="192.168.3.0"
+BROADCAST="192.168.3.255"
+GATEWAY="192.168.3.1"
 
 user_set()
 {
@@ -169,16 +169,16 @@ cd ~
 japanese_setup()
 {
 echo "---japanese_setup---"
-cd ~
-update_upgrade
-echo $PASS | sudo -S apt-get -y install language-pack-ja manpages-ja
-echo $PASS | sudo -S update-locale LANG=ja_JP.UTF-8
-export LANG=ja_JP.UTF-8
-echo "case \$TERM in
-     linux)LANG=C ;;
-     *)LANG=ja_JP.UTF-8 ;;
-esac" >>/home/${USER}/.bashrc
-LANG=C
+#cd ~
+#update_upgrade
+#echo $PASS | sudo -S apt-get -y install language-pack-ja manpages-ja
+#echo $PASS | sudo -S update-locale LANG=ja_JP.UTF-8
+#export LANG=ja_JP.UTF-8
+#echo "case \$TERM in
+#     linux)LANG=C ;;
+#     *)LANG=ja_JP.UTF-8 ;;
+#esac" >>/home/${USER}/.bashrc
+#LANG=C
 echo "Asia/Tokyo" | sudo tee /etc/timezone
 echo $PASS | sudo -S dpkg-reconfigure -f noninteractive tzdata
 echo $PASS | sudo -S sed -i -e "s/\"us\"/\"jp\"/" /etc/default/keyboard
