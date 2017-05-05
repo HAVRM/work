@@ -84,7 +84,7 @@ RAR=(`ls | grep -i .rar`)
 echo "0" > ~/rar2pdf/wait.txt
 for arg in ${RAR[@]}
 do
-	. make_pdf.sh ${arg%.*} ${arg} ${WNUM} & > /dev/null
+	. img2pdf_find.sh ${arg%.*} ${arg} ${WNUM} & > /dev/null
 	echo -e "\rstarting "${arg%.*}" by $!"
 	WNUM=`expr ${WNUM} + 1`
 	if [ $WNUM = $MNUM ]
