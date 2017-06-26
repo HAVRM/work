@@ -12,7 +12,7 @@ i = InputBox(pr_txt, "sheet selection", 1)
 s_name(0) = s_name(i)
 pr_txt = "sheet:" & s_name(0) & vbCr & vbCr
 c_name = InputBox(pr_txt & "select cells by ""A1""", "cell selection", ActiveCell.Address(False, False))
-d_name = Application.GetOpenFilename("TEXTデータ,*.txt,CSVデータ,*.csv")
+d_name = Application.GetOpenFilename("TEXT data,*.txt,CSV data,*.csv")
 If d_name = "False" Then
     Exit Sub
 End If
