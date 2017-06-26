@@ -1,0 +1,30 @@
+Sub data_export()
+
+Dim ws As Worksheet
+Dim d_name As String
+d_name = InputBox("export file name")
+Set ws = ThisWorkbook.ActiveSheet
+
+Open d_name For Output As #1
+ 
+Dim i As Long, j As Long
+i = 1
+ 
+Do While ws.Cells(i, 1).Value <> ""
+ 
+    j = 1
+    Do While ws.Cells(i, j + 1).Value <> ""
+ 
+        Print #1, ws.Cells(i, j).Value & ",";
+        j = j + 1
+ 
+    Loop
+ 
+    Print #1, ws.Cells(i, j).Value & vbCr;
+    i = i + 1
+ 
+Loop
+ 
+Close #1
+ 
+End Sub
